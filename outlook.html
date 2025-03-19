@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2025年前瞻 - 2024年中国商业银行业绩分析</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="js/main.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>2024年中国商业银行业绩分析与2025年前瞻</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">概述</a></li>
+          <li><a href="asset-quality.html">规模</a></li>
+          <li><a href="profitability.html">盈利表现</a></li>
+          <li><a href="nim.html">净息差</a></li>
+          <li><a href="capital.html">风险指标</a></li>
+          <li><a href="outlook.html" class="active">2025前瞻</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="dashboard">
+      <div class="card">
+        <div class="card-header">
+          <h2>2025年银行业核心发展前瞻</h2>
+        </div>
+        <div class="card-body">
+          <div class="insight-card">
+            <h3>宏观环境：经济温和复苏，政策稳中有松</h3>
+            <p>2025年国内宏观经济有望延续温和复苏态势。主流预测认为GDP增速可达到5%左右（高于2024年的4.8%-4.9%预期），通胀温和可控。政策面在中央"强化逆周期调节"的基调下，将实施更加积极的财政政策和适度宽松的货币政策，但鉴于2024年已实施较大幅度的降息操作，2025年货币政策可能以观望和定向调节为主，进一步大幅降息概率降低。这为银行业务发展提供了相对稳定的外部环境。</p>
+          </div>
+          <div class="insight-card">
+            <h3>盈利趋势：触底反弹，结构调整提速</h3>
+            <p>随着经济复苏动能增强和多轮货币政策效果逐步显现，2025年银行业有望迎来盈利拐点。一方面，净息差在存款重定价完成和贷款利率企稳后止跌回升，预计将企稳于1.50%-1.55%区间；另一方面，银行将加快非息收入培育，降本增效，并在资产质量稳定的背景下控制拨备消耗。预计2025年行业ROE将温和回升至8.5%左右，但距离10%以上的历史高位仍有距离，利润增速可能恢复至3%-5%区间。</p>
+          </div>
+          <div class="insight-card">
+            <h3>业务转型：差异化竞争加速，优胜劣汰提速</h3>
+            <p>2025年银行业分化将进一步加剧，各类银行走差异化发展道路。大型银行将发挥综合优势，深耕重点区域和核心客群；股份行在加快零售业务发展的同时，积极培育特色化投行业务；城商行专注于服务地方经济和特色产业；农商行则继续扎根县域市场，深化三农服务。金融科技和数字化转型将全面铺开，赋能银行降本增效和业务创新。与此同时，行业整合浪潮将持续，部分弱小机构通过并购重组实现风险出清和资源整合。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>2025年银行业监管环境展望</h2>
+        </div>
+        <div class="card-body">
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('regulationTrendChart')) {
+                const ctx = document.getElementById('regulationTrendChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'radar',
+                  data: {
+                    labels: ['风险防控', '支持实体经济', '房地产金融稳定', '资本监管', '理财业务监管', '金融科技监管'],
+                    datasets: [
+                      {
+                        label: '2024年监管强度',
+                        data: [3.8, 4.5, 4.2, 4.0, 3.5, 3.8],
+                        backgroundColor: 'rgba(77, 157, 224, 0.2)',
+                        borderColor: 'rgba(77, 157, 224, 0.8)',
+                        pointBackgroundColor: 'rgba(77, 157, 224, 0.8)',
+                        borderWidth: 2
+                      },
+                      {
+                        label: '2025年监管强度预测',
+                        data: [4.2, 4.7, 3.8, 4.5, 4.0, 4.3],
+                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                        borderColor: 'rgba(40, 167, 69, 0.8)',
+                        pointBackgroundColor: 'rgba(40, 167, 69, 0.8)',
+                        borderWidth: 2
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                      r: {
+                        min: 0,
+                        max: 5,
+                        ticks: {
+                          stepSize: 1
+                        }
+                      }
+                    },
+                    plugins: {
+                      title: {
+                        display: true,
+                        text: '2024-2025年银行业监管重点预测',
+                        font: { size: 16 }
+                      },
+                      tooltip: {
+                        callbacks: {
+                          label: function(context) {
+                            return `${context.dataset.label}: ${context.raw}/5`;
+                          }
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+          
+          <div class="chart-container">
+            <canvas id="regulationTrendChart"></canvas>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <p>2025年银行业监管重点将围绕以下几个方面展开：</p>
+            <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+              <li><span class="emphasis">风险防控持续强化</span>：进一步巩固金融安全底线，继续推进中小金融机构改革化险，指导地方政府运用专项债券等工具为地方法人银行补充资本，加快不良资产处置，防止区域性风险扩散。</li>
+              <li><span class="emphasis">深化金融供给侧改革</span>：推动银行业优化信贷结构，引导更多金融资源流向高质量发展的重点领域，如先进制造业、科技创新、绿色低碳、普惠金融等。</li>
+              <li><span class="emphasis">强化资本监管</span>：资本管理新规落地后，继续完善差异化资本监管制度，推动银行提高核心一级资本占比、优化风险加权资产配置。</li>
+              <li><span class="emphasis">完善金融风险处置框架</span>：存款保险制度改革、金融稳定保障基金运作以及风险处置协调机制进一步完善，建立市场化、法治化的风险处置机制。</li>
+              <li><span class="emphasis">房地产金融政策稳中有调</span>：继续支持刚性和改善性住房需求，优化存量房贷政策，促进房地产市场平稳健康发展，防范化解行业风险。</li>
+            </ol>
+            
+            <p>总体而言，2025年监管将在"防风险、强监管、促发展"的总基调下，更加注重精准施策和差异化监管，促进银行业在服务实体经济中实现高质量发展。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>各类银行发展战略展望</h2>
+        </div>
+        <div class="card-body">
+          <div class="tab-navigation">
+            <div class="tab-link active" data-tab="bank-type-1">大型商业银行</div>
+            <div class="tab-link" data-tab="bank-type-2">股份制银行</div>
+            <div class="tab-link" data-tab="bank-type-3">城市商业银行</div>
+            <div class="tab-link" data-tab="bank-type-4">农村金融机构</div>
+          </div>
+          
+          <div class="tab-content active" id="bank-type-1">
+            <h3 style="color: var(--primary-color); margin: 1rem 0 0.5rem;">大型商业银行：战略引领与稳健担当</h3>
+            <p>作为我国金融体系的中坚，六大国有行2025年依然扮演"压舱石"角色。它们将继续发挥网点渠道、资金成本和品牌信任优势，大力支持国家重点项目融资和战略产业发展。在业务重点上，大行会进一步加码对先进制造业、绿色信贷的投入，巩固过去两年30%以上的高速增长势头；同时，积极参与共同富裕战略，扩大乡村振兴贷款和普惠金融覆盖面。</p>
+            
+            <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+              <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">2025年发展重点</h4>
+              <ul style="padding-left: 1.2rem;">
+                <li>聚焦国家战略领域，扩大绿色金融、科技金融规模</li>
+                <li>加快数字化转型，推动线上线下一体化服务模式</li>
+                <li>加大财富管理和养老金融布局，提升非息收入贡献</li>
+                <li>推进国际化战略，提升跨境金融服务能力</li>
+                <li>培育投资银行能力，支持资本市场发展</li>
+              </ul>
+            </div>
+            
+            <p>在自身经营上，国有行会更加注重综合化和专业化经营，打造投资银行、资产管理、养老金融等专业子公司，以提升非息收入占比和综合竞争力。TLAC达标后的大行有条件逐步降低资本补充频率，更关注内在价值创造，预计其ROE有望保持在10%左右。总体而言，大型银行将继续保持稳健发展，为行业整体稳定提供支撑。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="bank-type-1" placeholder="在此添加您对大型商业银行发展趋势的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="bank-type-1">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="bank-type-2">
+            <h3 style="color: var(--primary-color); margin: 1rem 0 0.5rem;">股份制银行：转型突破与特色发展</h3>
+            <p>股份行在2025年的关键词是"转型突破"。过去一年中型银行息差压缩幅度最大、利润增速下滑明显，这迫使它们加快业务模式转型。一方面，股份行将更加注重零售业务的发展，发挥机制灵活的优势深耕个人客户。如招商银行等将继续强化财富管理、私人银行等优势业务，增加管理费和佣金收入；平安银行等深耕汽车消费金融领域，提升零售贷款占比。</p>
+            
+            <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+              <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">2025年发展重点</h4>
+              <ul style="padding-left: 1.2rem;">
+                <li>深化零售转型，大力发展财富管理和消费金融</li>
+                <li>积极拓展轻资本中间业务，如投行、托管、资管等</li>
+                <li>突出行业特色，在细分领域建立专业服务能力</li>
+                <li>加强金融科技投入，推动数字化客户获取和风控</li>
+                <li>优化资本结构和资产配置，提高资本回报率</li>
+              </ul>
+            </div>
+            
+            <p>另一方面，股份行会积极拓展轻资本中间业务，包括投资银行（投行承销、并购顾问）、托管、交易及衍生品等，以弥补息差收入不足。监管首提"培育一流投资银行"，这实际上为优秀股份行提供了机遇，它们有望在债券承销、跨境金融等方面取得突破。此外，股份行还将加强数字化和金融科技投入，通过线上获客和风控模型优化，提高经营效率、降低单位成本。预期2025年股份行的盈利有望逐步企稳，其中零售基础好、资产质量优的银行反弹力度会更大。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="bank-type-2" placeholder="在此添加您对股份制银行发展趋势的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="bank-type-2">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="bank-type-3">
+            <h3 style="color: var(--primary-color); margin: 1rem 0 0.5rem;">城市商业银行：深耕本地与特色化经营</h3>
+            <p>城商行在区域深耕中寻求差异化特色。面对经济区域分化趋势，沿海发达地区的城商行将紧抓当地民营经济复苏契机，重点服务小微企业和科创企业，打造"城市金融名片"。例如，南京银行、宁波银行等或进一步创新小微金融产品，占领当地市场份额。而中西部地区的城商行则可能依托地方政府背景，深度参与地方基础设施和民生项目融资，同时通过与政策性担保、再贷款政策对接，控制信贷风险。</p>
+            
+            <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+              <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">2025年发展重点</h4>
+              <ul style="padding-left: 1.2rem;">
+                <li>深耕本地市场，聚焦特色产业和小微企业服务</li>
+                <li>加强与地方政策对接，参与区域重大项目建设</li>
+                <li>推进特色化业务转型，减少与大行同质化竞争</li>
+                <li>提升精细化管理水平，严控资产质量</li>
+                <li>探索区域联动和跨区域合作，扩大业务半径</li>
+              </ul>
+            </div>
+            
+            <p>2025年城商行还将迎来整合浪潮：一些弱小城商行可能通过并购重组被更大的同行或资管平台接管，实现风险出清和资本重组。这符合中央关于中小银行改革的方向，有利于提高整体稳健性。整体而言，城商行会走"一行一策"的路径——有的做专做精，如专注供应链金融或文旅金融等细分领域；有的做强做大，通过区域性并购扩大规模。它们共同的课题是提升公司治理和风控能力，以缩小与大型银行在不良率和拨备上的差距。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="bank-type-3" placeholder="在此添加您对城市商业银行发展趋势的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="bank-type-3">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="bank-type-4">
+            <h3 style="color: var(--primary-color); margin: 1rem 0 0.5rem;">农村金融机构：服务三农与改革创新</h3>
+            <p>面对农村金融市场的巨大发展潜力，农商行将在2025年迎来"机遇与挑战"并存的局面。一方面，乡村振兴战略深入推进，县域经济活力提升，将带来广大农村地区的信贷需求增长。农商行应顺势而为，加大涉农贷款投放，开发适合农业经营主体的信贷产品，拓展农村消费金融，为农户和小微企业提供灵活便利的资金支持。数字普惠金融手段（如手机银行、数据风控）将在下沉市场大显身手，农商行可借此弥补网点不足的短板。</p>
+            
+            <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+              <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">2025年发展重点</h4>
+              <ul style="padding-left: 1.2rem;">
+                <li>深耕县域市场，加大涉农贷款和普惠服务力度</li>
+                <li>推进数字普惠金融，扩大农村金融服务覆盖面</li>
+                <li>加强体制机制改革，提升治理水平和风控能力</li>
+                <li>省域内农商行整合联合，提高资源集约利用效率</li>
+                <li>围绕乡村振兴战略，创新农村金融产品与服务</li>
+              </ul>
+            </div>
+            
+            <p>另一方面，农商行普遍存在资本不足、风控薄弱的问题，需要持续改革。2025年预计会有更多省份推进农商行省联社改革和跨区域整合，将分散的小银行集合成具有一定规模的新农商银行，提高抗风险能力。监管也可能出台针对农商行的差异化监管措施和指导，例如在资本计提、拨备政策上给予适度灵活，以促进其规范发展。在地方政府和大型银行的帮扶下，部分高风险农商行的不良资产将被剥离或重组，逐步恢复健康运营。可以预期，农商行在巩固县域市场的同时，也将探索适度跨区域经营和业务多元化，但总体上仍以服务"三农"和小微为主要使命，履行好支农支小的职责。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="bank-type-4" placeholder="在此添加您对农村金融机构发展趋势的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="bank-type-4">保存笔记</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>重点业务发展趋势分析</h2>
+        </div>
+        <div class="card-body">
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('businessGrowthChart')) {
+                const ctx = document.getElementById('businessGrowthChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2020', '2021', '2022', '2023', '2024', '2025E'],
+                    datasets: [
+                      {
+                        label: '绿色信贷',
+                        data: [100, 140, 190, 260, 320, 390],
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.2,
+                        fill: false
+                      },
+                      {
+                        label: '普惠金融',
+                        data: [100, 130, 170, 210, 250, 290],
+                        borderColor: '#ffc107',
+                        backgroundColor: 'rgba(255, 193, 7, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.2,
+                        fill: false
+                      },
+                      {
+                        label: '科技金融',
+                        data: [100, 125, 160, 190, 230, 280],
+                        borderColor: '#4d9de0',
+                        backgroundColor: 'rgba(77, 157, 224, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.2,
+                        fill: false
+                      },
+                      {
+                        label: '财富管理',
+                        data: [100, 120, 140, 155, 175, 210],
+                        borderColor: '#6f42c1',
+                        backgroundColor: 'rgba(111, 66, 193, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.2,
+                        fill: false
+                      },
+                      {
+                        label: '房地产金融',
+                        data: [100, 108, 105, 95, 90, 93],
+                        borderColor: '#dc3545',
+                        backgroundColor: 'rgba(220, 53, 69, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.2,
+                        fill: false
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      title: {
+                        display: true,
+                        text: '重点业务规模增长趋势（2020=100，指数化）',
+                        font: { size: 16 }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false
+                      }
+                    },
+                    scales: {
+                      y: {
+                        title: {
+                          display: true,
+                          text: '指数（2020=100）'
+                        },
+                        suggestedMin: 50,
+                        suggestedMax: 400
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '年份'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+          
+          <div class="chart-container">
+            <canvas id="businessGrowthChart"></canvas>
+          </div>
+          
+          <div style="margin-top: 2rem;">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">2025年银行业关键业务趋势分析</h3>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+              <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
+                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">绿色金融</h4>
+                <p>受"双碳"目标驱动，绿色信贷将保持30%左右高速增长。除传统的绿色贷款外，转型金融、碳金融、ESG投资等细分领域将蓬勃发展。大型银行将主导大型清洁能源项目融资，而中小银行则专注于区域绿色中小企业服务。监管政策将进一步完善绿色金融标准体系，出台更多激励措施，绿色资产证券化产品将显著增加。</p>
+              </div>
+              <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
+                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">科技金融</h4>
+                <p>银行加大对科创企业的信贷支持将成为2025年重点。科技信贷规模预计增长20%-25%，国家重点支持的高新技术产业将获得更多资源倾斜。银行将创新知识产权质押、股权质押、未来收益权质押等融资模式，降低科创企业融资门槛。投贷联动、科创基金等综合金融服务模式也将更加成熟，助力科技企业成长。</p>
+              </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem;">
+              <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
+                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">普惠金融</h4>
+                <p>普惠金融将继续深化发展，小微企业贷款增速保持在15%以上。银行将通过数字化手段降低获客和风控成本，提高普惠服务效率。供应链金融、小微融资担保等模式将广泛应用，普惠金融风险定价机制也将更加精准。农村普惠金融将借助数字乡村建设契机，实现服务触达更广泛的农村地区，助力乡村振兴战略实施。</p>
+              <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
+                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">财富管理</h4>
+                <p>财富管理业务将成为银行非息收入增长的重要引擎，增速在20%左右。人口老龄化背景下，养老金融产品将快速发展，银行理财与公募基金、保险等产品联动更加紧密。高净值客户服务竞争加剧，家族信托、全球资产配置等高端服务将成为头部银行差异化竞争优势。数字化赋能将使财富管理服务下沉至大众客群，实现规模化增长。</p>
+              </div>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+              <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
+                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">数字化转型</h4>
+                <p>2025年将是银行数字化转型深化之年。一方面，银行将借助AI、区块链、云计算等技术重塑业务流程，实现智能风控和精准营销；另一方面，数字化服务模式将全面铺开，线上线下一体化成为标配。开放银行API生态进一步扩展，银行与科技企业、场景方合作更加紧密。数字化转型将从前台获客扩展至中后台运营，真正实现降本增效的全链路数字化重构。</p>
+              </div>
+              <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
+                <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">房地产金融</h4>
+                <p>房地产金融将平稳调整，总体规模保持稳定。随着房地产市场企稳，个人按揭贷款有望恢复低速增长，但开发贷款仍将审慎控制。银行将加大对保障性住房、租赁住房的支持力度，形成"保交楼、保民生、保刚需"的差异化信贷政策。在风险防控方面，不良处置和重组力度将继续加大，优质房企融资环境有望改善，但整体房地产信贷占比将继续下降。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>2025年银行业投资价值解析</h2>
+        </div>
+        <div class="card-body">
+          <div style="margin-bottom: 2rem;">
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">估值分析与投资机会</h3>
+            <p>2025年银行业投资价值有望重新得到市场认可。截至2024年末，A股上市银行平均市净率(PB)约0.6倍，处于历史较低水平。随着2025年盈利企稳回升，特别是龙头银行ROE维持在10%以上，估值有望修复至0.7-0.8倍PB。投资机会主要集中在以下几类银行：</p>
+            
+            <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+              <li>资产质量稳健、零售转型成功的全国性银行，如招商银行等；</li>
+              <li>特色鲜明、区域优势突出的城商行，如宁波银行、南京银行等；</li>
+              <li>受益于农村振兴战略的优质农商行；</li>
+              <li>数字化转型领先、非息收入增长较快的创新型银行。</li>
+            </ol>
+            
+            <p>银行股的配置价值在于：一是估值处于低位，安全边际较高；二是股息率较高，现金分红稳定；三是作为经济企稳回升的受益者，具有顺周期特性。不过，投资者仍需警惕地产风险、息差继续收窄等潜在风险。</p>
+          </div>
+          
+          <div>
+            <h3 style="color: var(--primary-color); margin-bottom: 1rem;">总结与展望</h3>
+            <p>综合来看，进入2025年，中国商业银行业将在政策春风和自身变革的双重推动下，继续保持稳健发展的态势。经历了2023-2024年的利润低谷和业务调整后，银行业有望迎来业绩拐点：净息差企稳令收入状况改善，信贷需求回暖驱动资产适度增长，叠加前期风控投入带来的不良下降，银行盈利有条件实现同比恢复正增长。</p>
+            
+            <p>当然，高质量发展之路上仍有挑战，银行业需直面盈利模式转型、风险结构变化等课题。然而，可以确信的是，在强有力的政策引导和监管护航下，我国商业银行将更加坚实稳健地服务于经济高质量发展。展望2025，差异化竞争与协同创新将成为行业主旋律：大型行稳健担当、股份行灵活转型、城商行深耕本地、农商行扎根基层，各展所长，共同构筑起金融支持实体经济的坚固屏障和金融安全的稳定防线。</p>
+            
+            <div class="user-notes">
+              <h4>您的2025年展望分析</h4>
+              <textarea data-note-id="outlook-final" placeholder="在此添加您对银行业2025年整体展望的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="outlook-final">保存笔记</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>© 2024 中国银行业绩分析报告 | 数据来源：金融监管总局、中国人民银行</p>
+    </div>
+  </footer>
+</body>
+</html>

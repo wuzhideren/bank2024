@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>规模分析 - 2024年中国商业银行业绩分析</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="js/main.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>2024年中国商业银行业绩分析与2025年前瞻</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">概述</a></li>
+          <li><a href="asset-quality.html" class="active">规模</a></li>
+          <li><a href="profitability.html">盈利表现</a></li>
+          <li><a href="nim.html">净息差</a></li>
+          <li><a href="capital.html">风险指标</a></li>
+          <li><a href="outlook.html">2025前瞻</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="dashboard">
+      <div class="card">
+        <div class="card-header">
+          <h2>规模核心洞察</h2>
+        </div>
+        <div class="card-body">
+          <div class="insight-card">
+            <h3>资产总量增速放缓，金融服务实体经济定位更加明确</h3>
+            <p>2024年我国商业银行业务规模保持稳健增长但增速放缓，金融服务实体经济的定位更加明确。截至2024年末，我国银行业金融机构资产总额达380.5万亿元，同比增长7.2%，增速较上年明显放缓。这体现了金融监管"脱虚向实"的政策引导和银行业自身稳健经营策略的转变，行业正由追求规模扩张向高质量发展转型。</p>
+          </div>
+          <div class="insight-card">
+            <h3>银行类型分化明显，城商行增速领跑</h3>
+            <p>大型商业银行凭借全国布局和雄厚资本，资产总额达190.3万亿元，同比增长7.6%，占比42.8%，巩固了行业"压舱石"地位；城市商业银行资产60.2万亿元，增速9.0%，领跑各类银行；股份制银行74.2万亿元，增速4.7%；各类农村金融机构57.9万亿元，增速6.0%。这种分化既反映了各类银行的战略定位差异，也体现了区域经济发展不平衡对银行业务扩张的影响。</p>
+          </div>
+          <div class="insight-card">
+            <h3>信贷结构优化明显，普惠小微与绿色金融领跑</h3>
+            <p>2024年信贷增长呈现结构性优化，普惠小微贷款余额达32.6万亿元，同比增长14.7%；绿色贷款余额突破30.1万亿元，同比大增36.5%，远高于各项贷款平均增速。相反，房地产贷款余额同比下降1.0%，这是有记录以来首次年度负增长。信贷资源明显向国家战略引导的重点领域倾斜，反映了银行信贷投向与实体经济结构调整的良性互动。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>规模关键指标</h2>
+        </div>
+        <div class="card-body">
+          <div class="grid">
+            <div class="metric-card">
+              <h3>银行业总资产</h3>
+              <div class="value">380.5万亿</div>
+              <div class="change increase">
+                <span>同比 +7.2%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3>贷款余额</h3>
+              <div class="value">225万亿</div>
+              <div class="change increase">
+                <span>同比 +7.6%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3>普惠小微贷款</h3>
+              <div class="value">32.6万亿</div>
+              <div class="change increase">
+                <span>同比 +14.7%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3>绿色贷款</h3>
+              <div class="value">30.1万亿</div>
+              <div class="change increase">
+                <span>同比 +36.5%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="assetGrowthChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('assetGrowthChart')) {
+                const ctx = document.getElementById('assetGrowthChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2019Q4', '2020Q4', '2021Q4', '2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [
+                      {
+                        label: '银行业总资产(万亿元)',
+                        data: [290.0, 319.7, 344.8, 356.6, 385.5, 380.5],
+                        borderColor: '#1e88e5',
+                        backgroundColor: 'rgba(30, 136, 229, 0.1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: true,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#1e88e5',
+                        pointRadius: 4,
+                        yAxisID: 'y'
+                      },
+                      {
+                        label: '资产同比增速(%)',
+                        data: [8.1, 10.1, 8.6, 11.0, 7.2, 7.2],
+                        borderColor: '#34c759',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: false,
+                        pointBackgroundColor: '#fff',
+                        pointBorderColor: '#34c759',
+                        pointRadius: 4,
+                        yAxisID: 'y1'
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      title: {
+                        display: true,
+                        text: '2019-2024年银行业资产规模与增速变化',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          usePointStyle: true,
+                          pointStyle: 'circle'
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                          display: true,
+                          text: '资产规模(万亿元)'
+                        },
+                        min: 250,
+                        max: 400
+                      },
+                      y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                          display: true,
+                          text: '同比增速(%)'
+                        },
+                        min: 6,
+                        max: 12,
+                        grid: {
+                          drawOnChartArea: false
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>2.1 资产与信贷总量</h2>
+        </div>
+        <div class="card-body">
+          <div class="tab-navigation">
+            <div class="tab-link active" data-tab="scale-tab-1">总资产增速放缓</div>
+            <div class="tab-link" data-tab="scale-tab-2">大型银行主导</div>
+            <div class="tab-link" data-tab="scale-tab-3">城商行增速领跑</div>
+          </div>
+          
+          <div class="tab-content active" id="scale-tab-1">
+            <h3 class="tab-subtitle">2.1.1 总资产增速放缓（380.5万亿，+7.2%）</h3>
+            <p>截至2023年末，中国商业银行资产总额约354.85万亿元，同比增长11.0%；2024年末我国银行业金融机构资产总额达380.5万亿元，同比增长7.2%（增速较上年明显放缓）。增速放缓背后有以下原因：一是监管部门推动金融"脱虚向实"，引导银行放缓表内外资产扩张速度；二是经济增速换挡使得优质信贷需求相对不足；三是银行主动调整经营策略，从"做大规模"转向"提质增效"。</p>
+            <p>从资产结构看，贷款占比进一步提升，表内资产质量向好。2024年末贷款余额突破225万亿元，较2023年末增加16.9万亿元，贷款占资产比重达59.1%，同比上升1.4个百分点。投资类资产规模相对稳定，主要配置于国债和地方政府债券等低风险资产。而同业资产和表外理财等规模继续受到控制，增速低于表内信贷，体现了监管"引导资金脱虚向实"的政策效果。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="scale-1" placeholder="在此添加您对总资产增速放缓的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="scale-1">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="scale-tab-2">
+            <h3 class="tab-subtitle">2.1.2 大型银行主导（占比42.8%）</h3>
+            <p>大型商业银行继续保持行业"压舱石"地位，2024年末资产规模达190.3万亿元，占全行业的42.8%，同比增长7.6%，略高于行业平均。大型银行对国家重点项目和战略领域的融资支持力度不断加大，对制造业中长期贷款和绿色金融领域的投入明显提升，展现出服务实体经济和落实国家战略的担当。</p>
+            <p>从结构上看，大型银行在结构性存款搬家效应下，存款基础更加稳固，负债成本优势明显；资产端则得益于全国性网点布局和广泛的客户基础，贷款质量整体保持较好水平。在2024年的经济缓慢复苏过程中，国有大行发挥了稳定金融市场的重要作用，为中小微企业纾困、制造业升级、乡村振兴等领域提供了持续稳定的资金支持。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="scale-2" placeholder="在此添加您对大型银行主导地位的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="scale-2">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="scale-tab-3">
+            <h3 class="tab-subtitle">2.1.3 城商行增速领跑（+9.0%）</h3>
+            <p>2024年城市商业银行资产规模达60.2万亿元，同比增长9.0%，增速明显高于行业平均水平和其他类型银行。城商行高增长的背后是差异化竞争策略和区域经济特点的结合：一方面，沿海发达地区城商行依托区域经济活力，深耕本地市场，与当地中小企业形成紧密合作关系；另一方面，中西部地区城商行积极参与地方基础设施建设和产业升级项目，获得较为稳定的业务增长空间。</p>
+            <p>但也应注意到，城商行资产增长的质量和结构存在差异。头部城商行如南京银行、宁波银行等凭借优良的风控能力和创新的业务模式，实现了高质量扩张；而部分中小城商行则面临信贷风险上升和资本约束加剧的挑战。监管部门正推动城商行聚焦主业、回归本源，预计未来城商行的增长将更加注重质量而非单纯的规模扩张。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="scale-3" placeholder="在此添加您对城商行增速领跑的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="scale-3">保存笔记</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>2.2 信贷结构优化</h2>
+        </div>
+        <div class="card-body">
+          <div class="tab-navigation">
+            <div class="tab-link active" data-tab="credit-tab-1">普惠小微贷款</div>
+            <div class="tab-link" data-tab="credit-tab-2">绿色贷款</div>
+            <div class="tab-link" data-tab="credit-tab-3">房地产贷款收缩</div>
+          </div>
+          
+          <div class="tab-content active" id="credit-tab-1">
+            <h3 class="tab-subtitle">2.2.1 普惠小微贷款（32.6万亿，+14.7%）</h3>
+            <p>2024年普惠小微贷款保持高速增长，余额达32.6万亿元，同比增长14.7%，增速为各项贷款平均水平的近2倍。这一成绩得益于监管政策引导和银行战略调整的共同作用：一方面，央行实施普惠小微贷款支持工具，对符合条件的银行提供低成本资金支持；另一方面，银行加强普惠金融专营机制建设，运用大数据、云计算等科技手段提升小微企业融资便利性和可得性。</p>
+            <p>随着普惠小微贷款规模持续扩大，全国小微企业贷款覆盖面不断扩大，小微企业贷款综合融资成本持续下降，2024年较2017年末累计下降约3.8个百分点。从银行类型看，大型银行和城商行是普惠小微金融发展的主力军，分别依托科技赋能和本地化服务优势，在小微金融领域形成差异化竞争格局。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="credit-1" placeholder="在此添加您对普惠小微贷款增长的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="credit-1">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="credit-tab-2">
+            <h3 class="tab-subtitle">2.2.2 绿色贷款高速增长（30.1万亿，+36.5%）</h3>
+            <p>绿色金融成为2024年银行信贷结构调整的最大亮点。年末绿色贷款余额达30.1万亿元，同比增长36.5%，远高于各项贷款平均增速，占各项贷款比重提升至13.4%。绿色贷款主要投向清洁能源、节能环保、绿色交通等领域，对推动经济绿色低碳转型发挥了积极作用。"双碳"目标下，银行业积极探索绿色金融产品和服务创新，如绿色债券、碳金融、ESG投融资等，形成了多层次、多样化的绿色金融体系。</p>
+            <p>政策支持是绿色贷款高速增长的重要推动力。央行设立碳减排支持工具，对金融机构向碳减排重点领域提供的符合条件的贷款给予一定比例资金支持，提高了银行开展绿色信贷业务的积极性。监管部门也通过完善绿色信贷统计制度、加强绿色银行评价、开展气候风险压力测试等方式，引导银行加大绿色投融资力度，预计未来绿色贷款占比将进一步提高。</p>
+            
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                if (document.getElementById('greenCreditChart')) {
+                  const ctx = document.getElementById('greenCreditChart').getContext('2d');
+                  
+                  new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                      labels: ['2019Q4', '2020Q4', '2021Q4', '2022Q4', '2023Q4', '2024Q4'],
+                      datasets: [
+                        {
+                          label: '绿色贷款余额(万亿元)',
+                          data: [10.6, 12.0, 15.9, 22.1, 30.1, 41.0],
+                          borderColor: '#34c759',
+                          backgroundColor: 'rgba(52, 199, 89, 0.1)',
+                          borderWidth: 2,
+                          tension: 0.3,
+                          fill: true,
+                          pointBackgroundColor: '#fff',
+                          pointBorderColor: '#34c759',
+                          pointRadius: 4,
+                          yAxisID: 'y'
+                        },
+                        {
+                          label: '同比增速(%)',
+                          data: [26.5, 13.2, 32.5, 39.0, 36.5, 36.0],
+                          borderColor: '#1e88e5',
+                          borderWidth: 2,
+                          tension: 0.3,
+                          fill: false,
+                          pointBackgroundColor: '#fff',
+                          pointBorderColor: '#1e88e5',
+                          pointRadius: 4,
+                          yAxisID: 'y1'
+                        }
+                      ]
+                    },
+                    options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        title: {
+                          display: true,
+                          text: '2019-2024年绿色贷款余额及增速',
+                          font: { 
+                            size: 16,
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      },
+                      scales: {
+                        y: {
+                          type: 'linear',
+                          display: true,
+                          position: 'left',
+                          title: {
+                            display: true,
+                            text: '绿色贷款余额(万亿元)'
+                          }
+                        },
+                        y1: {
+                          type: 'linear',
+                          display: true,
+                          position: 'right',
+                          title: {
+                            display: true,
+                            text: '同比增速(%)'
+                          },
+                          grid: {
+                            drawOnChartArea: false
+                          }
+                        }
+                      }
+                    }
+                  });
+                }
+              });
+            </script>
+            
+            <div class="chart-container" style="height: 350px;">
+              <canvas id="greenCreditChart"></canvas>
+            </div>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="credit-2" placeholder="在此添加您对绿色贷款增长的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="credit-2">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="credit-tab-3">
+            <h3 class="tab-subtitle">2.2.3 房地产贷款首次收缩（-1.0%）</h3>
+            <p>2023年末人民币房地产贷款余额52.6万亿元，同比下降1.0%，其中个人住房贷款38.2万亿元，同比下降1.6%。这是有记录以来房地产贷款余额首次年度负增长，反映了房地产市场调整和银行信贷策略转变的双重影响。房地产贷款占各项贷款比重降至23.4%，较高峰时期下降近6个百分点。</p>
+            <p>房地产贷款减少主要受三方面因素影响：一是居民提前还贷现象增多，约有2万亿元的提前还款导致个人按揭余额下降；二是银行主动调整房地产信贷策略，压降开发贷款尤其是风险较高的项目；三是房地产市场需求下降，新发放住房贷款规模缩减。尽管如此，银行仍积极配合"保交楼"等政策，对优质房企和保障性住房项目保持适度信贷支持，推动房地产市场平稳健康发展。随着存量房贷利率调整政策落地和二套房首付比例下调，预计2025年房地产贷款降幅将有所收窄，但房贷占比持续下降的趋势不会改变。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="credit-3" placeholder="在此添加您对房地产贷款收缩的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="credit-3">保存笔记</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>© 2024 中国银行业绩分析报告 | 数据来源：金融监管总局、中国人民银行</p>
+    </div>
+  </footer>
+</body>
+</html> 

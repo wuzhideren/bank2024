@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>盈利表现分析 - 2024年中国商业银行业绩分析</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="js/main.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>2024年中国商业银行业绩分析与2025年前瞻</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html">概述</a></li>
+          <li><a href="asset-quality.html">规模</a></li>
+          <li><a href="profitability.html" class="active">盈利表现</a></li>
+          <li><a href="nim.html">净息差</a></li>
+          <li><a href="capital.html">风险指标</a></li>
+          <li><a href="outlook.html">2025前瞻</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="dashboard">
+      <div class="card">
+        <div class="card-header">
+          <h2>盈利表现核心洞察</h2>
+        </div>
+        <div class="card-body">
+          <div class="insight-card">
+            <h3>2024年银行业净利润首次下滑，ROE创历史新低</h3>
+            <p>2024年商业银行累计实现净利润2.3万亿元，同比下降约2%，这是近年来少有的利润下滑。银行业平均资产利润率（ROA）为0.63%，较上年0.70%明显下降；平均资本利润率（ROE）为8.10%，较上年的8.93%继续下滑。ROE已跌破10%至历史低位，反映银行"以量补价"维持利润的模式面临瓶颈。</p>
+          </div>
+          <div class="insight-card">
+            <h3>息差收窄是利润下滑主因，非息收入占比继续下降</h3>
+            <p>净息差收窄是利润下滑的主要原因。2024年全行业净息差仅1.52%，同比下降0.17个百分点，导致利息净收入同比减少。与此同时，手续费及佣金净收入也出现下滑，非息收入占比从2023年一季度22%逐季降至19.93%。这一比例明显低于欧美银行(~33%)，反映银行业务结构单一、过度依赖利差盈利的问题。</p>
+          </div>
+          <div class="insight-card">
+            <h3>银行类型盈利分化加剧，城商行利润大幅下滑</h3>
+            <p>不同类型银行表现差异显著：大型银行净利润同比小幅下降0.5%，股份制银行略有增长(+2.4%)，而城市商业银行利润大幅下降13.1%。大型银行凭借规模和拨备优势，利润相对平稳；城商行则因息差收窄和资产减值压力，盈利能力受到较大冲击。这种分化趋势将加速银行业格局重塑。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>盈利关键指标</h2>
+        </div>
+        <div class="card-body">
+          <div class="grid">
+            <div class="metric-card">
+              <h3>净利润</h3>
+              <div class="value">2.32万亿</div>
+              <div class="change decrease">
+                <span>同比 -2.0%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3>ROE</h3>
+              <div class="value">8.10%</div>
+              <div class="change decrease">
+                <span>同比 -0.83%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3>ROA</h3>
+              <div class="value">0.63%</div>
+              <div class="change decrease">
+                <span>同比 -0.07%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3>成本收入比</h3>
+              <div class="value">35.56%</div>
+              <div class="change increase">
+                <span>同比 +0.30%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="profitabilityChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>各类银行盈利能力对比</h2>
+        </div>
+        <div class="card-body">
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('bankProfitChangeChart')) {
+                const ctx = document.getElementById('bankProfitChangeChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: ['大型商业银行', '股份制银行', '城市商业银行', '全行业'],
+                    datasets: [
+                      {
+                        label: '2024年净利润同比增长率',
+                        data: [-0.5, 2.4, -13.1, -2.0],
+                        backgroundColor: [
+                          'rgba(77, 157, 224, 0.7)',
+                          'rgba(40, 167, 69, 0.7)',
+                          'rgba(220, 53, 69, 0.7)',
+                          'rgba(108, 117, 125, 0.7)'
+                        ],
+                        borderColor: [
+                          'rgba(77, 157, 224, 1)',
+                          'rgba(40, 167, 69, 1)',
+                          'rgba(220, 53, 69, 1)',
+                          'rgba(108, 117, 125, 1)'
+                        ],
+                        borderWidth: 1
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      title: {
+                        display: true,
+                        text: '2024年各类银行净利润同比增长率对比 (%)',
+                        font: { size: 16 }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false
+                      },
+                      legend: {
+                        display: false
+                      }
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        title: {
+                          display: true,
+                          text: '增长率 (%)'
+                        }
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '银行类型'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+          
+          <div class="chart-container">
+            <canvas id="bankProfitChangeChart"></canvas>
+          </div>
+          
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>银行类型</th>
+                <th>2023年净利润(亿元)</th>
+                <th>2024年净利润(亿元)</th>
+                <th>同比增长</th>
+                <th>ROA(2024)</th>
+                <th>ROE(2024)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>大型商业银行</td>
+                <td>13,161</td>
+                <td>13,099</td>
+                <td>-0.5%</td>
+                <td>0.71%</td>
+                <td>~10.2%</td>
+              </tr>
+              <tr>
+                <td>股份制商业银行</td>
+                <td>4,878</td>
+                <td>4,993</td>
+                <td>+2.4%</td>
+                <td>0.69%</td>
+                <td>~9.5%</td>
+              </tr>
+              <tr>
+                <td>城市商业银行</td>
+                <td>2,931</td>
+                <td>2,546</td>
+                <td>-13.1%</td>
+                <td>0.44%</td>
+                <td>~6.2%</td>
+              </tr>
+              <tr>
+                <td>全行业</td>
+                <td>23,775</td>
+                <td>23,235</td>
+                <td>-2.0%</td>
+                <td>0.63%</td>
+                <td>8.10%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>银行业收入结构分析</h2>
+        </div>
+        <div class="card-body">
+          <div class="grid">
+            <div class="chart-container" style="height: 300px;">
+              <canvas id="incomeStructureChart"></canvas>
+            </div>
+            <div>
+              <p>2023-2024年商业银行收入结构分析：</p>
+              <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li><span class="emphasis">利息净收入</span>：仍是主要来源，但占比有所下降。2023年上市银行利息净收入约4.4万亿元，占营业收入的75.5%，同比减少3.0%。</li>
+                <li><span class="emphasis">手续费及佣金净收入</span>：约7734亿元，占比13.2%，同比下降7.7%，主要受资本市场低迷和减费让利政策影响。</li>
+                <li><span class="emphasis">其他非息收入</span>：约6648亿元，占比11.3%，同比下降2.8%。</li>
+                <li><span class="emphasis">非息收入占比</span>：根据金监总局数据，2023年银行业非息收入占比从一季度22%逐季降至四季度的19.93%，至2024年末为22.42%，仍显著低于欧美银行(~33%)。</li>
+              </ul>
+              <p>收入结构变化反映了银行在利率下行环境中加强中间业务发展的努力，但非息收入增长仍未能有效对冲息差收窄的影响。银行需要加快推进财富管理、养老金融等新兴业务，培育新的收入增长点。</p>
+            </div>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('incomeStructureChart')) {
+                const ctx = document.getElementById('incomeStructureChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'doughnut',
+                  data: {
+                    labels: ['利息净收入', '手续费及佣金净收入', '其他非息收入'],
+                    datasets: [{
+                      data: [75.5, 13.2, 11.3],
+                      backgroundColor: [
+                        '#4d9de0',
+                        '#28a745',
+                        '#ffc107'
+                      ],
+                      borderColor: [
+                        '#366994',
+                        '#1e7e34',
+                        '#d39e00'
+                      ],
+                      borderWidth: 1
+                    }]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      title: {
+                        display: true,
+                        text: '2023年上市银行收入结构占比 (%)',
+                        font: { size: 14 }
+                      },
+                      tooltip: {
+                        callbacks: {
+                          label: function(context) {
+                            const label = context.label || '';
+                            const value = context.raw;
+                            return `${label}: ${value}%`;
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'right'
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+          
+          <!-- 非息收入趋势图 -->
+          <div class="chart-container" style="margin-top: 2rem;">
+            <canvas id="nonInterestIncomeChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('nonInterestIncomeChart')) {
+                const ctx = document.getElementById('nonInterestIncomeChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2020Q4', '2021Q4', '2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [{
+                      label: '非息收入占比 (%)',
+                      data: [21.04, 19.81, 18.80, 19.93, 22.42],
+                      borderColor: '#28a745',
+                      backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                      borderWidth: 2,
+                      tension: 0.2,
+                      fill: true
+                    }]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      title: {
+                        display: true,
+                        text: '2020-2024年商业银行非息收入占比变化趋势',
+                        font: { size: 14 }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: false,
+                        title: {
+                          display: true,
+                          text: '占比 (%)'
+                        },
+                        min: 18,
+                        max: 24
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '报告期'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>盈利承压的主要因素分析</h2>
+        </div>
+        <div class="card-body">
+          <div class="tab-navigation">
+            <div class="tab-link active" data-tab="profit-factor-1">净息差收窄</div>
+            <div class="tab-link" data-tab="profit-factor-2">非息收入下滑</div>
+            <div class="tab-link" data-tab="profit-factor-3">拨备策略影响</div>
+          </div>
+          
+          <div class="tab-content active" id="profit-factor-1">
+            <p>2024年银行业净息差收窄是影响利润的最主要因素：</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+              <li><span class="emphasis">息差大幅下滑</span>：行业净息差由2023年的1.69%降至1.52%，降幅0.17个百分点，创有统计以来最低水平。</li>
+              <li><span class="emphasis">贷款利率下行</span>：在多轮LPR调降和存量房贷利率下调影响下，生息资产收益率显著下降。2024年8月末企业贷款加权平均利率约3.87%，个人住房贷款平均利率也降至4.11%左右，均为有统计以来最低水平。</li>
+              <li><span class="emphasis">负债成本刚性</span>：尽管央行两度引导存款利率下调，但存款结构持续向定期、靠档计息产品倾斜，2024年银行存款平均付息率约为1.74%，相比年初仅小幅下降（2023年约1.8%）。</li>
+              <li><span class="emphasis">息差收窄贡献</span>：以五大行为例，2024年前三季度其生息资产收益率同比下降约40bps，而计息负债成本下降不到15bps，利差缩窄约25bps基本由资产端驱动。</li>
+            </ul>
+            <p>净息差收窄直接导致银行利息净收入大幅减少，是利润下滑的主要原因。这一趋势在2024年下半年有所缓解，但全年依然对银行盈利形成较大压力。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="profit-factor-1" placeholder="在此添加您对净息差收窄影响的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="profit-factor-1">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="profit-factor-2">
+            <p>非息收入下滑也是银行利润承压的重要因素：</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+              <li><span class="emphasis">中间业务收入下降</span>：2023年上市银行手续费及佣金净收入同比下降7.7%，主要因资本市场低迷、代理理财业务缩水以及落实减费让利政策所致。</li>
+              <li><span class="emphasis">财富管理转型阵痛</span>：在理财净值化转型过程中，银行理财规模增长放缓，收益率下降，导致理财业务收入减少。</li>
+              <li><span class="emphasis">国际业务受限</span>：全球经济复苏不均衡，跨境业务、结算和汇兑业务增长有限。</li>
+              <li><span class="emphasis">非息收入占比低</span>：银行业非息收入占比不足25%，较欧美银行约33%的水平存在较大差距，反映了中国银行业务模式仍较为单一。</li>
+            </ul>
+            <p>非息收入发展不足限制了银行利润增长的动力和韧性。在利率下行环境下，提高非息收入对冲息差收窄的能力成为银行业转型的关键方向。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="profit-factor-2" placeholder="在此添加您对非息收入下滑影响的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="profit-factor-2">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="profit-factor-3">
+            <p>拨备策略对2024年银行利润产生了复杂影响：</p>
+            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+              <li><span class="emphasis">拨备反哺利润</span>：在收入承压背景下，部分银行动用以前年度多提的拨备"余粮"反哺利润。2024年上半年行业净利润同比仅+0.4%，而同期拨备前利润同比-7.8%，靠降低拨备计提才实现了微增。</li>
+              <li><span class="emphasis">拨备计提节奏调整</span>：与往年相比，不少银行适度减少了拨备计提以平滑利润，但受不良处置加快影响，拨备消耗也相应增加。</li>
+              <li><span class="emphasis">拨备缓冲收窄</span>：部分银行拨备覆盖率已从极高位略有回落，传统的拨备反哺空间在缩小。</li>
+              <li><span class="emphasis">资产质量变化</span>：随着不良双降，实际需要的拨备计提有所减少，但结构性风险仍需关注。</li>
+            </ul>
+            <p>总体来看，拨备政策灵活运用在一定程度上缓解了银行利润下行压力，但这种方式难以长期持续。未来银行利润增长将更多依赖主营业务改善而非拨备调节。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="profit-factor-3" placeholder="在此添加您对拨备策略影响的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="profit-factor-3">保存笔记</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>盈利能力提升的主要举措与展望</h2>
+        </div>
+        <div class="card-body">
+          <p>面对盈利下行压力，银行业已开始调整经营策略，重点采取以下举措：</p>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0;">
+            <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
+              <h3 style="color: var(--primary-color); margin-bottom: 0.75rem;">成本控制</h3>
+              <ul style="padding-left: 1.2rem;">
+                <li>精简网点、人力以控制营业成本增长</li>
+                <li>提升数字化运营效率来改善成本收入比</li>
+                <li>优化绩效考核机制，引导全员降本增效</li>
+                <li>强化资本和风险加权资产管理，提高资本回报率</li>
+              </ul>
+            </div>
+            <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
+              <h3 style="color: var(--primary-color); margin-bottom: 0.75rem;">业务转型</h3>
+              <ul style="padding-left: 1.2rem;">
+                <li>向轻资本、轻资产的领域发展，丰富收入来源</li>
+                <li>发力信用卡、理财代销、托管及顾问等业务</li>
+                <li>推进财富管理、养老金融等新兴业务</li>
+                <li>严控资产质量避免利润"大起大落"</li>
+              </ul>
+            </div>
+          </div>
+          
+          <p>2025年银行业盈利前景展望：</p>
+          <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+            <li>净息差有望企稳回升，随着存款重定价完成和宽松政策边际减弱</li>
+            <li>非息收入占比将稳步提升，特别是财富管理、投行、资管等领域</li>
+            <li>盈利能力可能触底回升，但ROE难以恢复至10%以上的历史高位</li>
+            <li>银行间分化将继续，优质银行的估值溢价可能扩大</li>
+            <li>规模驱动向质量效益转变将成为主流趋势</li>
+          </ol>
+          
+          <p>总体而言，2025年银行业有望迎来盈利拐点，但过去依靠规模扩张和高杠杆驱动的高增长模式已不可持续。未来银行需要关注精细化管理、特色化经营和数字化转型，通过提质增效实现更可持续的盈利增长。</p>
+          
+          <div class="user-notes">
+            <h4>您的盈利能力提升分析</h4>
+            <textarea data-note-id="profit-outlook" placeholder="在此添加您对银行业盈利能力提升举措和展望的分析..."></textarea>
+            <button class="save-notes" data-note-id="profit-outlook">保存笔记</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>© 2024 中国银行业绩分析报告 | 数据来源：金融监管总局、中国人民银行</p>
+    </div>
+  </footer>
+</body>
+</html>

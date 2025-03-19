@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2024年中国商业银行业绩分析与2025年前瞻</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="js/main.js"></script>
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="logo">
+        <h1>2024年中国商业银行业绩分析与2025年前瞻</h1>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="index.html" class="active">概述</a></li>
+          <li><a href="asset-quality.html">规模</a></li>
+          <li><a href="profitability.html">盈利表现</a></li>
+          <li><a href="nim.html">净息差</a></li>
+          <li><a href="capital.html">风险指标</a></li>
+          <li><a href="outlook.html">2025前瞻</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="dashboard">
+      <div class="card">
+        <div class="card-header">
+          <h2>行业核心洞察</h2>
+        </div>
+        <div class="card-body">
+          <div class="insight-card">
+            <h3>银行业步入深度转型期，盈利模式调整迫在眉睫</h3>
+            <p>2024年银行业经历了盈利能力下行、净息差收缩和资产质量压力的多重考验，净利润同比首次出现负增长（-2%），ROE跌破10%至历史低位（8.10%），这标志着传统"以量补价"增长模式的终结。在政策环境变化和市场竞争加剧的背景下，银行业已进入深度转型期，需加快从规模扩张向质量效益提升转变。</p>
+          </div>
+          <div class="insight-card">
+            <h3>净息差跌至历史低位1.52%，是利润下滑的主要推手</h3>
+            <p>2024年商业银行净息差由1.69%进一步降至1.52%，创有监测数据以来的最低水平。LPR多次调降和存量房贷利率下调等政策因素是主要原因，负债端存款竞争激烈导致成本刚性更是雪上加霜。净息差收窄直接导致银行利息净收入大幅减少，成为利润下滑的主要推手。</p>
+          </div>
+          <div class="insight-card">
+            <h3>资产质量实现"双降"，但行业分化明显</h3>
+            <p>2024年不良贷款率降至1.50%，且不良余额实现净减少，风险抵补能力继续增强（拨备覆盖率211.19%），彰显银行业风险管理水平提升。但结构性风险依然突出：大型银行不良率仅1.23%，而农商行高达2.80%；房地产领域风险依然高企，对银行资产质量影响深远。</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>行业关键指标概览</h2>
+        </div>
+        <div class="card-body">
+          <div class="grid">
+            <div class="metric-card">
+              <h3>不良贷款率</h3>
+              <div class="value">1.50%</div>
+              <div class="change decrease">
+                <span>同比 -0.09%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3>净息差</h3>
+              <div class="value">1.52%</div>
+              <div class="change decrease">
+                <span>同比 -0.17%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3>ROE</h3>
+              <div class="value">8.10%</div>
+              <div class="change decrease">
+                <span>同比 -0.83%</span>
+              </div>
+            </div>
+            <div class="metric-card">
+              <h3>资本充足率</h3>
+              <div class="value">15.74%</div>
+              <div class="change increase">
+                <span>同比 +0.68%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-container">
+            <canvas id="profitabilityChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2>1.1 政策背景与监管导向</h2>
+        </div>
+        <div class="card-body">
+          <div class="tab-navigation">
+            <div class="tab-link active" data-tab="policy-tab-1">中央金融工作会议</div>
+            <div class="tab-link" data-tab="policy-tab-2">两会金融政策</div>
+            <div class="tab-link" data-tab="policy-tab-3">9·24金融政策组合拳</div>
+          </div>
+          
+          <div class="tab-content active" id="policy-tab-1">
+            <h3 class="tab-subtitle">1.1.1 中央金融工作会议五大任务</h3>
+            <p>2023年10月30-31日召开的中央金融工作会议规格空前，明确了未来几年金融工作的五大任务：加快建设金融强国、全面加强金融监管、完善金融体制、优化金融服务、防范化解风险。会议强调金融的政治性和人民性，要求走中国特色金融发展之路，突出金融高质量发展与供给侧结构性改革。</p>
+            <p>针对当前突出问题，会议特别提出要稳妥化解地方政府债务和房地产风险，着力"稳地产、地方化债、活跃资本市场"。同时会议首提<span class="emphasis">"培育一流投资银行和投资机构"</span>，强化直接融资市场，这为银行业指明了支持资本市场和提升专业能力的新方向。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="policy-1" placeholder="在此添加您对政策解读的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="policy-1">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="policy-tab-2">
+            <h3 class="tab-subtitle">1.1.2 2024年"两会"政策基调</h3>
+            <p>2024年全国"两会"期间，监管层延续了中央金融会议精神，强调积极的财政政策和适度宽松的货币政策取向。政府明确要求银行业加大对实体经济的支持，尤其是制造业、科技创新、中小微企业等领域的信贷投放，同时落实减费让利政策，继续引导降低企业融资成本。</p>
+            <p>中国人民银行行长表示，将根据经济需要适时运用降准、降息等工具，以保持流动性合理充裕。在防风险方面，"两会"强调巩固金融安全底线，要求银行配合地方政府专项债务置换，缓释区域性债务风险，并继续支持刚性和改善性住房需求，促进房地产市场平稳健康发展。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="policy-2" placeholder="在此添加您对两会金融政策的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="policy-2">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="policy-tab-3">
+            <h3 class="tab-subtitle">1.1.3 "9·24"金融政策组合拳</h3>
+            <p>2024年9月24日，央行、金监总局、证监会联合推出一揽子增量政策，以提振市场信心和支持实体经济。货币政策方面，人民银行宣布下调存款准备金率0.5个百分点（释放长期流动性约1万亿元），并将7天逆回购利率下调20个基点至1.5%，引导贷款市场报价利率（LPR）和存款利率下行，"保持商业银行净息差的稳定"。</p>
+            <p>同时启动存量房贷利率调整，指导银行将存量按揭利率下调约0.5个百分点，央行预计此举可惠及5000万户、1.5亿人，每年减少利息支出约1500亿元。尽管存量房贷利率下调直接减少银行利息收入，但有望缓解提前还贷压力，对银行影响偏中性。房地产金融政策方面，统一全国二套房首付比例下调至20%以下，并将两项重点房贷支持政策延期至2026年底。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="policy-3" placeholder="在此添加您对9·24政策组合拳的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="policy-3">保存笔记</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="card">
+        <div class="card-header">
+          <h2>1.2 宏观经济与行业定位</h2>
+        </div>
+        <div class="card-body">
+          <div class="tab-navigation">
+            <div class="tab-link active" data-tab="macro-tab-1">经济复苏与利率走势</div>
+            <div class="tab-link" data-tab="macro-tab-2">银行服务实体经济方向</div>
+          </div>
+          
+          <div class="tab-content active" id="macro-tab-1">
+            <h3 class="tab-subtitle">1.2.1 经济复苏与利率走势</h3>
+            <p>2024年中国经济延续复苏态势但力度趋缓，全年GDP增速预计在4.8%-4.9%区间。内需不足仍是主要制约因素，消费增速放缓、房地产投资继续下行，基建投资则成为稳增长的关键支撑。通胀水平保持低位，CPI同比增长约1%，PPI小幅负增长，这为货币政策提供了宽松空间。</p>
+            <p>利率方面，2024年央行通过降准释放长期流动性，多次下调政策利率：7天逆回购利率累计下调35个基点至1.5%，1年期LPR累计下调30个基点至3.35%，5年期LPR下调35个基点至3.95%。与此同时，存款利率自律机制引导存款利率下行，但幅度小于贷款利率下降幅度，息差进一步收窄成为银行业最大挑战。</p>
+            
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                if (document.getElementById('interestRateChart')) {
+                  const ctx = document.getElementById('interestRateChart').getContext('2d');
+                  
+                  new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                      labels: ['2019Q4', '2020Q4', '2021Q4', '2022Q4', '2023Q4', '2024Q4'],
+                      datasets: [
+                        {
+                          label: '1年期LPR (%)',
+                          data: [4.15, 3.85, 3.80, 3.65, 3.45, 3.35],
+                          borderColor: '#1e88e5',
+                          backgroundColor: 'rgba(30, 136, 229, 0.1)',
+                          borderWidth: 2,
+                          tension: 0.3,
+                          fill: true,
+                          pointBackgroundColor: '#fff',
+                          pointBorderColor: '#1e88e5'
+                        },
+                        {
+                          label: '5年期LPR (%)',
+                          data: [4.80, 4.65, 4.60, 4.30, 4.20, 3.95],
+                          borderColor: '#34c759',
+                          borderWidth: 2,
+                          tension: 0.3,
+                          fill: false,
+                          pointBackgroundColor: '#fff',
+                          pointBorderColor: '#34c759'
+                        }
+                      ]
+                    },
+                    options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        title: {
+                          display: true,
+                          text: '2019-2024年贷款市场报价利率(LPR)变化趋势',
+                          font: { 
+                            size: 16,
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        },
+                        tooltip: {
+                          mode: 'index',
+                          intersect: false
+                        },
+                        legend: {
+                          position: 'top',
+                          labels: {
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                          }
+                        }
+                      },
+                      scales: {
+                        y: {
+                          beginAtZero: false,
+                          min: 3.0,
+                          max: 5.0
+                        }
+                      }
+                    }
+                  });
+                }
+              });
+            </script>
+            
+            <div class="chart-container" style="height: 350px;">
+              <canvas id="interestRateChart"></canvas>
+            </div>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="macro-1" placeholder="在此添加您对经济复苏与利率走势的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="macro-1">保存笔记</button>
+            </div>
+          </div>
+          
+          <div class="tab-content" id="macro-tab-2">
+            <h3 class="tab-subtitle">1.2.2 银行业服务实体经济方向</h3>
+            <p>监管部门引导银行践行"以服务实体经济为本"的政策导向，重点支持五个关键领域：一是加大对制造业特别是高端制造业中长期融资，促进产业升级；二是发力科技金融，增加对科创企业、专精特新企业的信贷支持；三是持续深化普惠金融，提升小微企业和"三农"金融服务覆盖面；四是积极推动绿色金融发展，助力"双碳"目标实现；五是优化房地产金融政策，"因城施策"支持刚性和改善性住房需求。</p>
+            <p>为支持上述领域，金融监管部门推出系列结构性政策：设立制造业转型升级专项再贷款，实施科技创新再贷款，延长普惠小微贷款支持工具，扩大碳减排支持工具规模，并发放保交楼专项贷款支持房地产项目收尾。在多重政策引导下，银行信贷结构明显优化，普惠小微贷款和绿色贷款高速增长，制造业中长期贷款增加，而地产贷款占比下降，信贷资源更多流向国家重点战略领域和薄弱环节。</p>
+            
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                if (document.getElementById('creditStructureChart')) {
+                  const ctx = document.getElementById('creditStructureChart').getContext('2d');
+                  
+                  new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                      labels: ['普惠小微贷款', '绿色贷款', '制造业贷款', '房地产贷款'],
+                      datasets: [
+                        {
+                          label: '2023年增速 (%)',
+                          data: [23.5, 36.5, 11.2, -1.0],
+                          backgroundColor: '#1e88e5'
+                        },
+                        {
+                          label: '2024年增速 (%)',
+                          data: [14.7, 28.5, 9.8, -1.5],
+                          backgroundColor: '#34c759'
+                        }
+                      ]
+                    },
+                    options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      plugins: {
+                        title: {
+                          display: true,
+                          text: '银行业重点领域贷款增速对比',
+                          font: { 
+                            size: 16,
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      },
+                      scales: {
+                        y: {
+                          title: {
+                            display: true,
+                            text: '同比增速 (%)'
+                          }
+                        }
+                      }
+                    }
+                  });
+                }
+              });
+            </script>
+            
+            <div class="chart-container" style="height: 350px;">
+              <canvas id="creditStructureChart"></canvas>
+            </div>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="macro-2" placeholder="在此添加您对银行业服务实体经济方向的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="macro-2">保存笔记</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="container">
+      <p>© 2024 中国银行业绩分析报告 | 数据来源：金融监管总局、中国人民银行</p>
+    </div>
+  </footer>
+</body>
+</html> 
