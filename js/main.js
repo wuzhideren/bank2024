@@ -1,4 +1,3 @@
-@ -0,0 +1,783 @@
 document.addEventListener('DOMContentLoaded', function() {
   // 初始化标签页
   initializeTabs();
@@ -9,6 +8,34 @@ document.addEventListener('DOMContentLoaded', function() {
   // 加载所有图表
   loadAllCharts();
 });
+
+// 添加全局配置，为所有图表添加数据标签
+Chart.defaults.plugins.datalabels = {
+  color: '#333',
+  anchor: 'end',
+  align: 'top',
+  offset: 4,
+  formatter: function(value, context) {
+    // 根据数据类型返回格式化的值
+    if (typeof value === 'number') {
+      // 对于百分比类型的数据，显示一位小数
+      if (context.dataset.label && context.dataset.label.includes('%')) {
+        return value.toFixed(1) + '%';
+      }
+      // 对于大数值，使用简化显示
+      if (value > 1000) {
+        return (value / 1000).toFixed(1) + 'k';
+      }
+      // 默认数值显示格式
+      return value.toFixed(1);
+    }
+    return value;
+  },
+  display: function(context) {
+    // 只显示一些关键点的标签，避免过多标签导致混乱
+    return true;
+  }
+};
 
 // 标签页切换功能
 function initializeTabs() {
@@ -78,6 +105,15 @@ function initializeUserNotes() {
 
 // 加载所有图表
 function loadAllCharts() {
+  // 引入Chart.js数据标签插件
+  if (!Chart.plugins.getAll().find(p => p.id === 'datalabels')) {
+    try {
+      Chart.register(ChartDataLabels);
+    } catch (e) {
+      console.warn('ChartDataLabels plugin not available, using built-in labels');
+    }
+  }
+  
   // 基于当前页面加载相应的图表
   const currentPage = window.location.pathname.split('/').pop();
   
@@ -86,9 +122,13 @@ function loadAllCharts() {
   } else if (currentPage === 'asset-quality.html') {
     renderAssetQualityChart();
     renderLoanDistributionChart();
+    renderLoanGrowthChart(); // 新增国有行等贷款增速曲线图
+    renderLoanIncrementChart(); // 新增贷款规模增量占比图
+    renderLoanDirectionTable(); // 新增贷款投向数据表
   } else if (currentPage === 'profitability.html') {
     renderProfitabilityChart();
     renderROEChart();
+    renderProfitIncrementChart(); // 新增净利润增量占比图
   } else if (currentPage === 'nim.html') {
     renderNIMChart();
   } else if (currentPage === 'capital.html') {
@@ -96,6 +136,7 @@ function loadAllCharts() {
     renderBankNPLComparisonChart();
     renderCapitalAdequacyChart();
     renderNPLByBankTypeChart();
+    renderExcessReserveChart(); // 新增超额拨备增量图
   }
 }
 
@@ -144,6 +185,17 @@ function renderAssetQualityChart() {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
+        datalabels: {
+          formatter: function(value, context) {
+            return value.toFixed(2);
+          },
+          color: function(context) {
+            return context.dataset.borderColor;
+          },
+          font: {
+            weight: 'bold'
+          }
+        },
         title: {
           display: true,
           text: '2020-2024年商业银行资产质量核心指标变化',
@@ -781,4 +833,441 @@ function renderBankNPLComparisonChart() {
       }
     });
   }
+}
+
+// 新增国有行、股份行、城商行、农商行的22-24年贷款规模同比增速曲线图
+function renderLoanGrowthChart() {
+  if (!document.getElementById('loanGrowthChart')) return;
+  
+  const ctx = document.getElementById('loanGrowthChart').getContext('2d');
+  
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['2022Q4', '2023Q4', '2024Q4'],
+      datasets: [
+        {
+          label: '国有行贷款增速(%)',
+          data: [11, 13, 9],
+          borderColor: '#1e88e5',
+          backgroundColor: 'rgba(30, 136, 229, 0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: false
+        },
+        {
+          label: '股份行贷款增速(%)',
+          data: [7, 6, 4],
+          borderColor: '#28a745',
+          backgroundColor: 'rgba(40, 167, 69, 0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: false
+        },
+        {
+          label: '城商行贷款增速(%)',
+          data: [12, 11, 8],
+          borderColor: '#ffc107',
+          backgroundColor: 'rgba(255, 193, 7, 0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: false
+        },
+        {
+          label: '农商行贷款增速(%)',
+          data: [10, 10, 8],
+          borderColor: '#dc3545',
+          backgroundColor: 'rgba(220, 53, 69, 0.1)',
+          borderWidth: 2,
+          tension: 0.3,
+          fill: false
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: {
+          formatter: function(value) {
+            return value + '%';
+          },
+          color: function(context) {
+            return context.dataset.borderColor;
+          },
+          font: {
+            weight: 'bold'
+          }
+        },
+        title: {
+          display: true,
+          text: '2022-2024年各类银行贷款规模同比增速',
+          font: { size: 16 }
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false
+        },
+        legend: {
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: false,
+          title: {
+            display: true,
+            text: '增速 (%)'
+          },
+          min: 0,
+          max: 15
+        },
+        x: {
+          title: {
+            display: true,
+            text: '报告期'
+          }
+        }
+      }
+    }
+  });
+}
+
+// 新增国有行、股份行、城商行、农商行的22-24年贷款规模增量占比图
+function renderLoanIncrementChart() {
+  if (!document.getElementById('loanIncrementChart')) return;
+  
+  const ctx = document.getElementById('loanIncrementChart').getContext('2d');
+  
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['2022年', '2023年', '2024年'],
+      datasets: [
+        {
+          label: '国有行',
+          data: [61, 68, 54],
+          backgroundColor: '#1e88e5',
+          borderColor: 'rgba(30, 136, 229, 1)',
+          borderWidth: 1
+        },
+        {
+          label: '股份行',
+          data: [14, 13, 10],
+          backgroundColor: '#28a745',
+          borderColor: 'rgba(40, 167, 69, 1)',
+          borderWidth: 1
+        },
+        {
+          label: '城商行',
+          data: [16, 15, 13],
+          backgroundColor: '#ffc107',
+          borderColor: 'rgba(255, 193, 7, 1)',
+          borderWidth: 1
+        },
+        {
+          label: '农商行',
+          data: [9, 14, 11],
+          backgroundColor: '#dc3545',
+          borderColor: 'rgba(220, 53, 69, 1)',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: {
+          formatter: function(value) {
+            return value + '%';
+          },
+          color: '#fff',
+          font: {
+            weight: 'bold'
+          }
+        },
+        title: {
+          display: true,
+          text: '2022-2024年各类银行贷款规模增量占比',
+          font: { size: 16 }
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ': ' + context.raw + '%';
+            }
+          }
+        },
+        legend: {
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          stacked: true,
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: '占比 (%)'
+          },
+          max: 100
+        },
+        x: {
+          stacked: true,
+          title: {
+            display: true,
+            text: '年份'
+          }
+        }
+      }
+    }
+  });
+}
+
+// 新增国有行、股份行、城商行、农商行的22-24年净利润增量占比图
+function renderProfitIncrementChart() {
+  if (!document.getElementById('profitIncrementChart')) return;
+  
+  const ctx = document.getElementById('profitIncrementChart').getContext('2d');
+  
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['2022年', '2023年', '2024年'],
+      datasets: [
+        {
+          label: '国有行',
+          data: [58, 56, -32],
+          backgroundColor: '#1e88e5',
+          borderColor: 'rgba(30, 136, 229, 1)',
+          borderWidth: 1
+        },
+        {
+          label: '股份行',
+          data: [23, 18, 120],
+          backgroundColor: '#28a745',
+          borderColor: 'rgba(40, 167, 69, 1)',
+          borderWidth: 1
+        },
+        {
+          label: '城商行',
+          data: [10, 15, -185],
+          backgroundColor: '#ffc107',
+          borderColor: 'rgba(255, 193, 7, 1)',
+          borderWidth: 1
+        },
+        {
+          label: '农商行',
+          data: [9, 11, -3],
+          backgroundColor: '#dc3545',
+          borderColor: 'rgba(220, 53, 69, 1)',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: {
+          formatter: function(value) {
+            return value + '%';
+          },
+          color: '#fff',
+          font: {
+            weight: 'bold'
+          }
+        },
+        title: {
+          display: true,
+          text: '2022-2024年各类银行净利润增量占比',
+          font: { size: 16 }
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+          callbacks: {
+            label: function(context) {
+              return context.dataset.label + ': ' + context.raw + '%';
+            }
+          }
+        },
+        legend: {
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: '占比 (%)'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: '年份'
+          }
+        }
+      }
+    }
+  });
+}
+
+// 新增超额拨备增量图
+function renderExcessReserveChart() {
+  if (!document.getElementById('excessReserveChart')) return;
+  
+  const ctx = document.getElementById('excessReserveChart').getContext('2d');
+  
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['国有行', '股份行', '城商行', '民营', '农商行'],
+      datasets: [
+        {
+          label: '2022年超额拨备',
+          data: [17568, 5846, 4376, 302, 3262],
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
+        },
+        {
+          label: '2023年超额拨备',
+          data: [19499, 6149, 4763, 308, 2964],
+          backgroundColor: 'rgba(255, 99, 132, 0.6)',
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        },
+        {
+          label: '2024年超额拨备',
+          data: [20731, 6067, 4786, 290, 4385],
+          backgroundColor: 'rgba(75, 192, 192, 0.6)',
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        datalabels: {
+          display: function(context) {
+            // 只显示每个分组的最后一个数据
+            return context.datasetIndex === 2;
+          },
+          formatter: function(value) {
+            if (value >= 1000) {
+              return (value/1000).toFixed(1) + 'k';
+            }
+            return value;
+          },
+          color: '#333',
+          font: {
+            weight: 'bold'
+          }
+        },
+        title: {
+          display: true,
+          text: '2022-2024年各类银行超额拨备变化',
+          font: { size: 16 }
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false
+        },
+        legend: {
+          position: 'top'
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: {
+            display: true,
+            text: '超额拨备(亿元)'
+          }
+        },
+        x: {
+          title: {
+            display: true,
+            text: '银行类型'
+          }
+        }
+      }
+    }
+  });
+}
+
+// 新增贷款投向数据表
+function renderLoanDirectionTable() {
+  if (!document.getElementById('loanDirectionTable')) return;
+  
+  const tableContainer = document.getElementById('loanDirectionTable');
+  
+  // 创建表格HTML
+  const tableHTML = `
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>贷款投向</th>
+          <th>24Q4(亿元)</th>
+          <th>24Q4同比</th>
+          <th>23Q4(亿元)</th>
+          <th>23Q4同比</th>
+          <th>22Q4(亿元)</th>
+          <th>22Q4同比</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>企事业单位贷款余额</td>
+          <td>1,710,100</td>
+          <td>9%</td>
+          <td>1,570,700</td>
+          <td>13%</td>
+          <td>1,393,600</td>
+          <td>14%</td>
+        </tr>
+        <tr>
+          <td>企事业单位贷款余额:经营性贷款</td>
+          <td>693,300</td>
+          <td>8%</td>
+          <td>643,800</td>
+          <td>15%</td>
+          <td>561,100</td>
+          <td>13%</td>
+        </tr>
+        <tr>
+          <td>住户贷款余额:消费性贷款</td>
+          <td>210,100</td>
+          <td>6%</td>
+          <td>197,700</td>
+          <td>15%</td>
+          <td>172,500</td>
+          <td>4%</td>
+        </tr>
+        <tr>
+          <td>住户贷款余额:经营性贷款</td>
+          <td>241,400</td>
+          <td>9%</td>
+          <td>221,500</td>
+          <td>17%</td>
+          <td>189,000</td>
+          <td>17%</td>
+        </tr>
+      </tbody>
+    </table>
+  `;
+  
+  // 设置表格标题和内容
+  tableContainer.innerHTML = `
+    <h3 style="margin-bottom: 1rem;">2022-2024年贷款投向增速及规模</h3>
+    ${tableHTML}
+  `;
 } 
