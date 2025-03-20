@@ -7,7 +7,151 @@
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   <script src="js/main.js"></script>
+  <style>
+    /* 全面优化页面布局，消除所有多余空白 */
+    body {
+      line-height: 1.4 !important;
+    }
+    
+    .container {
+      padding: 0.75rem !important;
+    }
+    
+    header {
+      margin-bottom: 0.5rem !important;
+    }
+    
+    .dashboard .card,
+    .dashboard .card * {
+      box-sizing: border-box !important;
+    }
+    
+    .dashboard .card {
+      margin-bottom: 0.5rem !important;
+      border-radius: 0.25rem !important;
+    }
+    
+    .dashboard .card-header {
+      padding: 0.4rem 0.5rem !important;
+    }
+    
+    .dashboard .card-header h2 {
+      margin: 0 !important;
+      font-size: 1.1rem !important;
+    }
+    
+    .dashboard .card-body {
+      padding: 0.5rem !important;
+    }
+    
+    .dashboard h3 {
+      margin: 0.25rem 0 !important;
+      font-size: 1rem !important;
+    }
+    
+    .dashboard p {
+      margin: 0.25rem 0 !important;
+      line-height: 1.3 !important;
+    }
+    
+    .dashboard .chart-container {
+      margin: 0.35rem 0 !important;
+      height: 250px !important;
+    }
+    
+    .dashboard .insight-card {
+      margin-bottom: 0.4rem !important;
+      padding: 0.4rem !important;
+    }
+    
+    .dashboard .grid {
+      gap: 0.4rem !important;
+      margin-bottom: 0.4rem !important;
+    }
+    
+    .dashboard .metric-card {
+      padding: 0.4rem !important;
+    }
+    
+    .dashboard .metric-card h3 {
+      margin: 0 0 0.2rem 0 !important;
+      font-size: 0.9rem !important;
+    }
+    
+    .dashboard .value {
+      margin-bottom: 0.2rem !important;
+    }
+    
+    .dashboard .change {
+      font-size: 0.8rem !important;
+    }
+    
+    .dashboard table.data-table {
+      margin: 0.35rem 0 !important;
+      font-size: 0.9rem !important;
+    }
+    
+    .dashboard table.data-table th,
+    .dashboard table.data-table td {
+      padding: 0.3rem !important;
+    }
+    
+    .dashboard ul, 
+    .dashboard ol {
+      margin: 0.25rem 0 !important;
+      padding-left: 1.2rem !important;
+    }
+    
+    .dashboard li {
+      margin-bottom: 0.2rem !important;
+      line-height: 1.3 !important;
+    }
+    
+    .dashboard .tab-navigation {
+      margin-bottom: 0.3rem !important;
+    }
+    
+    .dashboard .tab-content {
+      margin-top: 0.3rem !important;
+    }
+    
+    .dashboard .tab-link {
+      padding: 0.3rem 0.5rem !important;
+      font-size: 0.9rem !important;
+    }
+    
+    .dashboard .user-notes {
+      margin-top: 0.3rem !important;
+    }
+    
+    .dashboard .user-notes h4 {
+      margin: 0 0 0.2rem 0 !important;
+      font-size: 0.9rem !important;
+    }
+    
+    .dashboard textarea {
+      padding: 0.3rem !important;
+      margin-bottom: 0.3rem !important;
+      min-height: 60px !important;
+    }
+    
+    .dashboard button {
+      padding: 0.2rem 0.4rem !important;
+      font-size: 0.8rem !important;
+    }
+    
+    footer {
+      margin-top: 0.5rem !important;
+      padding: 0.5rem 0 !important;
+    }
+    
+    footer p {
+      margin: 0 !important;
+      font-size: 0.8rem !important;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -90,6 +234,133 @@
           <div class="chart-container">
             <canvas id="nplRatioChart"></canvas>
           </div>
+          
+          <!-- 添加商业银行不良率和不良余额变动趋势图 -->
+          <div class="chart-container" style="margin-top: 0.35rem !important;">
+            <canvas id="nplTrendChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('nplTrendChart')) {
+                const ctx = document.getElementById('nplTrendChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2021Q4', '2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [
+                      {
+                        label: '不良贷款率 (%)',
+                        data: [1.73, 1.63, 1.59, 1.50],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4,
+                        yAxisID: 'y'
+                      },
+                      {
+                        label: '不良贷款余额 (亿元)',
+                        data: [28470, 29829, 32256, 32792],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4,
+                        yAxisID: 'y1'
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value, context) {
+                          if (context.datasetIndex === 0) {
+                            return value.toFixed(2) + '%';
+                          } else {
+                            return value;
+                          }
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2021-2024年商业银行不良率和不良余额变动趋势',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            if (context.datasetIndex === 0) {
+                              return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                            } else {
+                              return context.dataset.label + ': ' + context.parsed.y + '亿元';
+                            }
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          usePointStyle: true,
+                          pointStyle: 'circle',
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                          display: true,
+                          text: '不良贷款率 (%)'
+                        },
+                        min: 1.4,
+                        max: 1.8
+                      },
+                      y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                          display: true,
+                          text: '不良贷款余额 (亿元)'
+                        },
+                        min: 28000,
+                        max: 33000,
+                        grid: {
+                          drawOnChartArea: false
+                        }
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '报告期'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
         </div>
       </div>
 
@@ -101,6 +372,124 @@
           <div class="chart-container">
             <canvas id="bankNPLComparisonChart"></canvas>
           </div>
+          
+          <!-- 添加各类银行不良率变动趋势图表 -->
+          <div class="chart-container" style="margin-top: 0.75rem;">
+            <canvas id="bankNplTrendChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('bankNplTrendChart')) {
+                const ctx = document.getElementById('bankNplTrendChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [
+                      {
+                        label: '国有行',
+                        data: [1.31, 1.26, 1.23],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '股份行',
+                        data: [1.32, 1.26, 1.22],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '城商行',
+                        data: [1.85, 1.75, 1.76],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '农商行',
+                        data: [3.22, 3.34, 2.80],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value.toFixed(2) + '%';
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年各类银行不良率变动趋势',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          usePointStyle: true,
+                          pointStyle: 'circle',
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        title: {
+                          display: true,
+                          text: '不良贷款率 (%)'
+                        },
+                        suggestedMin: 1.0,
+                        suggestedMax: 3.5
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '报告期'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
           
           <table class="data-table">
             <thead>
@@ -137,9 +526,9 @@
               <tr>
                 <td>农村商业银行</td>
                 <td>2.50%</td>
-                <td>2.80%</td>
-                <td>+0.30%</td>
-                <td>7,778</td>
+                <td>3.34%</td>
+                <td>-0.54%</td>
+                <td>7,776</td>
               </tr>
               <tr>
                 <td>全行业</td>
@@ -153,10 +542,188 @@
         </div>
       </div>
 
+      <!-- 新增超额拨备增量图表 -->
       <div class="card">
         <div class="card-header">
-          <h2>4.1 资产质量深度分析</h2>
+          <h2>各类银行超额拨备变化</h2>
         </div>
+        <div class="card-body">
+          <div class="chart-container">
+            <canvas id="excessReserveChart"></canvas>
+          </div>
+          
+          <!-- 添加各类银行超额拨备变动趋势图表 -->
+          <div class="chart-container" style="margin-top: 0.75rem;">
+            <canvas id="reserveTrendChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('reserveTrendChart')) {
+                const ctx = document.getElementById('reserveTrendChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [
+                      {
+                        label: '国有行',
+                        data: [1926, 1932, 1231],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '股份行',
+                        data: [555, 303, -82],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '城商行',
+                        data: [469, 387, 24],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '农商行',
+                        data: [1006, -298, 1422],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value;
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年各类银行超额拨备变动趋势',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y + '亿元';
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          usePointStyle: true,
+                          pointStyle: 'circle',
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        title: {
+                          display: true,
+                          text: '超额拨备金额 (亿元)'
+                        },
+                        suggestedMin: -500,
+                        suggestedMax: 2500
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '报告期'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+          
+          <table class="data-table" style="margin-top: 0.75rem !important;">
+            <thead>
+              <tr>
+                <th>银行类型</th>
+                <th>2022年超额拨备(亿元)</th>
+                <th>2023年超额拨备(亿元)</th>
+                <th>2024年超额拨备(亿元)</th>
+                <th>22-24年变动</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>国有行</td>
+                <td>17,568</td>
+                <td>19,499</td>
+                <td>20,731</td>
+                <td>+3,163</td>
+              </tr>
+              <tr>
+                <td>股份行</td>
+                <td>5,846</td>
+                <td>6,149</td>
+                <td>6,067</td>
+                <td>+221</td>
+              </tr>
+              <tr>
+                <td>城商行</td>
+                <td>4,376</td>
+                <td>4,763</td>
+                <td>4,786</td>
+                <td>+410</td>
+              </tr>
+              <tr>
+                <td>民营</td>
+                <td>302</td>
+                <td>308</td>
+                <td>290</td>
+                <td>-12</td>
+              </tr>
+              <tr>
+                <td>农商行</td>
+                <td>3,262</td>
+                <td>2,964</td>
+                <td>4,385</td>
+                <td>+1,123</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <h2> 资产质量深度分析</h2>
         <div class="card-body">
           <div class="tab-navigation">
             <div class="tab-link active" data-tab="asset-tab-1">不良"双降"内在原因</div>
@@ -169,7 +736,7 @@
             <p>2024年不良贷款"双降"（率降额降）的原因有三方面：一是银行加大了不良贷款处置力度。大型银行通过核销、打包转让等方式消化存量不良，提高了处置效率。四季度单季处置不良近千亿元，不良余额较三季末减少977亿元，处置力度创近几年新高。</p>
             <p>二是经济缓慢复苏改善了部分企业经营状况。受益于宏观政策扶持和重点行业复苏，部分优质企业客户的风险状况有所改善，新增不良生成率下降。尤其是制造业、服务业等领域，随着产业升级和消费恢复，资产质量明显改善。三是房地产风险的监管协调机制发挥作用。通过"保交楼"专项贷款和存量房贷利率调整等措施，部分房地产企业风险得到缓释，住户违约率下降，一定程度上减轻了银行房地产类贷款的不良压力。</p>
             
-            <div class="user-notes">
+            <div class="user-notes" style="margin-top: 0.5rem;">
               <h4>您的分析笔记</h4>
               <textarea data-note-id="asset-1" placeholder="在此添加您对不良双降原因的分析笔记..."></textarea>
               <button class="save-notes" data-note-id="asset-1">保存笔记</button>
@@ -181,7 +748,7 @@
             <p>尽管整体资产质量向好，但结构性风险仍然突出。首先，房地产领域仍是银行业不良风险的主要来源。房地产开发贷款不良率高达5%左右，远高于平均水平。虽然下半年房地产风险缓释初现端倪，但持续低迷的市场状况仍对银行房地产风险形成压力。部分银行已采取主动风险缓释措施，如参与优质房企纾困和问题项目盘活。</p>
             <p>其次，地方政府隐性债务风险逐步透明化。2024年11月，全国人大常委会审议通过由财政部发行10万亿元国债置换地方存量债务，有助于缓解地方融资平台压力，间接改善商业银行对地方政府相关贷款的资产质量预期。第三，关注类贷款占比为2.22%，较上年略有上升，需持续监测。若将关注类计入广义不良口径，则广义不良率约3.7%，显示潜在风险仍需关注。总体而言，银行业在重点领域风险识别和防控上更加积极主动，结构性风险虽存在但处于可控范围内。</p>
             
-            <div class="user-notes">
+            <div class="user-notes" style="margin-top: 0.5rem;">
               <h4>您的分析笔记</h4>
               <textarea data-note-id="asset-2" placeholder="在此添加您对高风险领域的分析笔记..."></textarea>
               <button class="save-notes" data-note-id="asset-2">保存笔记</button>
@@ -193,7 +760,7 @@
             <p>2024年银行业资产质量总体平稳，得益于监管和银行多措并举"防患于未然"。首先，严格信贷分类和核销策略持续执行。监管部门年内推进新金融工具及不良认定规则，要求银行真实反映资产风险，及时将逾期90天以上贷款计入不良。银行则提早暴露和处置问题资产，通过清收重组、核销打包出售等手段腾出表内空间。</p>
             <p>其次，拨备政策灵活运用平滑业绩波动。在利润承压背景下，部分银行动用以前年度多提的拨备"余粮"反哺利润，同时仍保持充足拨备覆盖，以防未来不确定性。再次，政策纾困降低了高风险领域对银行的不利影响。房地产金融方面，监管搭建"协调机制"督促项目保交付，央行定向提供保障性住房再贷款支持；地方政府债务则通过中央出手置换长债，降低短期流动性压力。最后，中小银行改革稳步推进，对高风险机构采用市场化重组、同业并购等方式"拆弹"，有效防止了个案风险演变为区域性金融风波。</p>
             
-            <div class="user-notes">
+            <div class="user-notes" style="margin-top: 0.5rem;">
               <h4>您的分析笔记</h4>
               <textarea data-note-id="asset-3" placeholder="在此添加您对风险管理举措的分析笔记..."></textarea>
               <button class="save-notes" data-note-id="asset-3">保存笔记</button>
@@ -205,12 +772,12 @@
       <!-- 资本充足率部分 -->
       <div class="card">
         <div class="card-header">
-          <h2>4.2 资本充足水平分析</h2>
+          <h2>资本充足水平分析</h2>
         </div>
         <div class="card-body">
           <div class="insight-card">
             <h3>资本充足水平稳健提升，新规实施平稳过渡</h3>
-            <p>2024年商业银行资本充足水平总体稳健提升，行业资本充足率小幅上升至15.74%（较2023年末上升0.68个百分点），核心一级资本充足率升至11.00%（较年初提升0.46个百分点）。2024年1月1日起施行的新《商业银行资本管理办法》平稳落地，不但未造成行业资本缺口压力，反而通过精细化计量优化了资本配置，资本质量有所改善。</p>
+            <p>2024年商业银行资本充足水平总体稳健提升，行业资本充足率小幅上升至15.74%，核心一级资本充足率升至11.00%（较年初提升0.14个百分点）。2024年1月1日起施行的新《商业银行资本管理办法》平稳落地，不但未造成行业资本缺口压力，反而通过精细化计量优化了资本配置，资本质量有所改善。</p>
           </div>
           <div class="insight-card">
             <h3>各类银行资本补充措施多元化，大型银行资本优势明显</h3>
@@ -233,28 +800,28 @@
               <h3>资本充足率</h3>
               <div class="value">15.74%</div>
               <div class="change increase">
-                <span>同比 +0.68%</span>
+                <span></span>
               </div>
             </div>
             <div class="metric-card">
               <h3>核心一级资本充足率</h3>
               <div class="value">11.00%</div>
               <div class="change increase">
-                <span>同比 +0.46%</span>
+                <span></span>
               </div>
             </div>
             <div class="metric-card">
               <h3>一级资本充足率</h3>
               <div class="value">12.57%</div>
               <div class="change increase">
-                <span>同比 +0.45%</span>
+                <span></span>
               </div>
             </div>
             <div class="metric-card">
               <h3>大型银行资本充足率</h3>
               <div class="value">18.33%</div>
               <div class="change increase">
-                <span>同比 +0.77%</span>
+                <span></span>
               </div>
             </div>
           </div>
@@ -262,76 +829,362 @@
           <div class="chart-container">
             <canvas id="capitalAdequacyChart"></canvas>
           </div>
+          
+          <!-- 添加商业银行资本充足率变动趋势图 -->
+          <div class="chart-container" style="margin-top: 0.75rem;">
+            <canvas id="carTrendChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('carTrendChart')) {
+                const ctx = document.getElementById('carTrendChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2021Q4', '2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [
+                      {
+                        label: '资本充足率 (%)',
+                        data: [15.43, 15.53, 15.62, 15.74],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '核心一级资本充足率 (%)',
+                        data: [10.77, 10.74, 10.86, 11.00],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: true,
+                        pointRadius: 4
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value.toFixed(2) + '%';
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2021-2024年商业银行资本充足率变动趋势',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          usePointStyle: true,
+                          pointStyle: 'circle',
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        title: {
+                          display: true,
+                          text: '资本充足率 (%)'
+                        },
+                        suggestedMin: 10,
+                        suggestedMax: 16
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '报告期'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+          
+          <!-- 添加各类银行资本充足率变动趋势图表 -->
+          <div class="chart-container" style="margin-top: 0.75rem;">
+            <canvas id="bankCarTrendChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('bankCarTrendChart')) {
+                const ctx = document.getElementById('bankCarTrendChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [
+                      {
+                        label: '国有行',
+                        data: [18.31, 18.26, 18.33],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '股份行',
+                        data: [13.61, 13.80, 13.98],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '城商行',
+                        data: [12.71, 12.86, 12.97],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '农商行',
+                        data: [12.31, 12.20, 12.50],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value.toFixed(2) + '%';
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年各类银行资本充足率变动趋势',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          usePointStyle: true,
+                          pointStyle: 'circle',
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        title: {
+                          display: true,
+                          text: '资本充足率 (%)'
+                        },
+                        suggestedMin: 12,
+                        suggestedMax: 19
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '报告期'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
         </div>
       </div>
 
       <div class="card">
         <div class="card-header">
-          <h2>各类银行资本充足率对比</h2>
         </div>
         <div class="card-body">
           <div class="chart-container">
-            <canvas id="bankCapitalComparisonChart"></canvas>
+            <canvas id="bankNPLComparisonChart"></canvas>
           </div>
           
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th>银行类型</th>
-                <th>2023年资本充足率</th>
-                <th>2024年资本充足率</th>
-                <th>变动</th>
-                <th>2024年核心一级资本充足率</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>大型商业银行</td>
-                <td>17.56%</td>
-                <td>18.33%</td>
-                <td>+0.77%</td>
-                <td>12.85%</td>
-              </tr>
-              <tr>
-                <td>股份制商业银行</td>
-                <td>13.43%</td>
-                <td>13.98%</td>
-                <td>+0.55%</td>
-                <td>10.25%</td>
-              </tr>
-              <tr>
-                <td>城市商业银行</td>
-                <td>12.63%</td>
-                <td>12.97%</td>
-                <td>+0.34%</td>
-                <td>9.50%</td>
-              </tr>
-              <tr>
-                <td>农村商业银行</td>
-                <td>12.20%</td>
-                <td>12.50%</td>
-                <td>+0.30%</td>
-                <td>9.30%</td>
-              </tr>
-              <tr>
-                <td>全行业</td>
-                <td>15.06%</td>
-                <td>15.74%</td>
-                <td>+0.68%</td>
-                <td>11.00%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+          <!-- 添加各类银行不良率变动趋势图表 -->
+          <div class="chart-container" style="margin-top: 0.75rem;">
+            <canvas id="bankNplTrendChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('bankNplTrendChart')) {
+                const ctx = document.getElementById('bankNplTrendChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [
+                      {
+                        label: '国有行',
+                        data: [1.31, 1.26, 1.23],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '股份行',
+                        data: [1.32, 1.26, 1.22],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '城商行',
+                        data: [1.85, 1.75, 1.76],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '农商行',
+                        data: [3.22, 3.34, 2.80],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value.toFixed(2) + '%';
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年各类银行不良率变动趋势',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          usePointStyle: true,
+                          pointStyle: 'circle',
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        title: {
+                          display: true,
+                          text: '不良贷款率 (%)'
+                        },
+                        suggestedMin: 1.0,
+                        suggestedMax: 3.5
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '报告期'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+          
+
 
       <div class="card">
         <div class="card-header">
           <h2>资本补充渠道分析</h2>
         </div>
         <div class="card-body">
-          <div class="grid">
-            <div class="chart-container" style="height: 300px;">
+          <div class="grid" style="gap: 0.75rem;">
+            <div class="chart-container" style="height: 300px; margin: 0;">
               <canvas id="capitalSupplementChart"></canvas>
             </div>
             <div>
@@ -379,6 +1232,15 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value + '亿';
+                        },
+                        color: '#fff',
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
                       title: {
                         display: true,
                         text: '2024年银行资本补充渠道分布（单位：亿元，估计值）',
@@ -426,7 +1288,7 @@
             </ul>
             <p>新规在衔接国际监管标准的同时，更加突出了差异化监管理念和支持重点领域导向，体现了监管部门"防风险、强监管、促发展"的政策思路。</p>
             
-            <div class="user-notes">
+            <div class="user-notes" style="margin-top: 0.5rem;">
               <h4>您的分析笔记</h4>
               <textarea data-note-id="capital-rule-1" placeholder="在此添加您对资本新规主要内容的分析笔记..."></textarea>
               <button class="save-notes" data-note-id="capital-rule-1">保存笔记</button>
@@ -435,7 +1297,7 @@
           
           <div class="tab-content" id="capital-rule-2">
             <p>资本新规的差异化监管框架特点主要体现在：</p>
-            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+            <ul style="margin: 0.5rem 0 !important; padding-left: 1.5rem;">
               <li><span class="emphasis">按规模分档监管</span>：根据资产规模将银行分为三档：大型银行（5万亿以上）、中型银行（1-5万亿）和小型银行（1万亿以下），不同档次适用不同监管标准。</li>
               <li><span class="emphasis">资本计量方法差异</span>：一档银行需采用内部评级法计量信用风险加权资产，二档银行可采用标准法或简化标准法，三档银行可采用简化标准法。</li>
               <li><span class="emphasis">风险加权资产优惠</span>：对服务实体经济、支持普惠金融的资产给予风险权重优惠，如制造业中长期贷款、小微企业贷款等。</li>
@@ -444,7 +1306,7 @@
             </ul>
             <p>这种差异化监管体系既考虑到银行业务复杂性和规模差异，又避免了"一刀切"监管可能带来的适应性问题，使监管资源配置更加优化，也为中小银行降低了合规成本。</p>
             
-            <div class="user-notes">
+            <div class="user-notes" style="margin-top: 0.5rem;">
               <h4>您的分析笔记</h4>
               <textarea data-note-id="capital-rule-2" placeholder="在此添加您对差异化监管特点的分析笔记..."></textarea>
               <button class="save-notes" data-note-id="capital-rule-2">保存笔记</button>
@@ -453,7 +1315,7 @@
           
           <div class="tab-content" id="capital-rule-3">
             <p>资本新规对银行业带来的影响主要表现在：</p>
-            <ul style="margin: 1rem 0; padding-left: 1.5rem;">
+            <ul style="margin: 0.5rem 0 !important; padding-left: 1.5rem;">
               <li><span class="emphasis">业务结构调整</span>：促使银行更加关注政策支持领域，如对制造业、绿色、科技创新等领域的信贷投放明显增加。同时审慎控制高风险权重业务，尤其是房地产相关业务增速放缓。</li>
               <li><span class="emphasis">资本使用效率提升</span>：银行更注重资本占用与收益的平衡，体现为风险加权资产（RWA）增速低于资产增速，反映精细化资本管理意识增强。</li>
               <li><span class="emphasis">风险计量能力分化</span>：大型银行积极发展内部评级法和内部模型，提升风险识别和量化能力；而中小银行需在标准法框架下更多依赖外部评级。</li>
@@ -462,7 +1324,7 @@
             </ul>
             <p>监管测算显示，新规实施后银行业资本充足水平总体稳定并略有上升，表明资本新规总体影响可控，达到了优化资本配置、引导信贷投向的政策目标。长期看，新规将有助于银行业形成更加稳健、高效的资本管理体系。</p>
             
-            <div class="user-notes">
+            <div class="user-notes" style="margin-top: 0.5rem;">
               <h4>您的分析笔记</h4>
               <textarea data-note-id="capital-rule-3" placeholder="在此添加您对资本新规影响的分析笔记..."></textarea>
               <button class="save-notes" data-note-id="capital-rule-3">保存笔记</button>
@@ -478,10 +1340,10 @@
         <div class="card-body">
           <p>展望2025年，商业银行资本管理将面临以下发展趋势：</p>
           
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0;">
-            <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
-              <h3 style="color: var(--primary-color); margin-bottom: 0.75rem;">监管趋势</h3>
-              <ul style="padding-left: 1.2rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0;">
+            <div style="background-color: var(--light-color); padding: 0.75rem; border-radius: var(--border-radius);">
+              <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">监管趋势</h3>
+              <ul style="padding-left: 1.2rem; margin: 0.5rem 0 !important;">
                 <li>资本监管要求将持续趋严，与国际监管标准接轨</li>
                 <li>差异化资本监管体系进一步健全，提升精准性</li>
                 <li>TLAC和内部TLAC要求将逐步实施与完善</li>
@@ -489,9 +1351,9 @@
                 <li>资本质量监管更加严格，提高核心资本比重</li>
               </ul>
             </div>
-            <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
-              <h3 style="color: var(--primary-color); margin-bottom: 0.75rem;">银行应对策略</h3>
-              <ul style="padding-left: 1.2rem;">
+            <div style="background-color: var(--light-color); padding: 0.75rem; border-radius: var(--border-radius);">
+              <h3 style="color: var(--primary-color); margin-bottom: 0.5rem;">银行应对策略</h3>
+              <ul style="padding-left: 1.2rem; margin: 0.5rem 0 !important;">
                 <li>优化内源资本积累机制，提高利润留存率</li>
                 <li>多渠道、多元化拓展外部融资渠道</li>
                 <li>加强精细化资本管理，提高资本使用效率</li>
@@ -502,7 +1364,7 @@
           </div>
           
           <p>具体预测和建议：</p>
-          <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+          <ol style="margin: 0.5rem 0 !important; padding-left: 1.5rem;">
             <li>资本充足率：预计2025年行业资本充足率将继续小幅上升至16%左右，但银行类型间分化可能加大。</li>
             <li>资本结构：核心一级资本补充将成为重点，预计核心一级资本充足率目标将提高至11.5%左右。</li>
             <li>补充渠道：永续债、二级资本债等工具发行规模保持稳定，更多银行可能考虑股权融资。</li>
@@ -512,7 +1374,7 @@
           
           <p>总体而言，2025年银行资本管理将更加注重平衡监管达标和高效运营的关系，在保持适度资本水平的同时，更加关注资本质量和使用效率，推动银行业形成集约化、可持续的发展模式。</p>
           
-          <div class="user-notes">
+          <div class="user-notes" style="margin-top: 0.5rem;">
             <h4>您的资本趋势展望</h4>
             <textarea data-note-id="capital-outlook" placeholder="在此添加您对银行业资本管理趋势的分析展望..."></textarea>
             <button class="save-notes" data-note-id="capital-outlook">保存笔记</button>

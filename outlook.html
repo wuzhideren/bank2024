@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   <script src="js/main.js"></script>
 </head>
 <body>
@@ -55,81 +56,126 @@
           <h2>2025年银行业监管环境展望</h2>
         </div>
         <div class="card-body">
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-              if (document.getElementById('regulationTrendChart')) {
-                const ctx = document.getElementById('regulationTrendChart').getContext('2d');
-                
-                new Chart(ctx, {
-                  type: 'radar',
-                  data: {
-                    labels: ['风险防控', '支持实体经济', '房地产金融稳定', '资本监管', '理财业务监管', '金融科技监管'],
-                    datasets: [
-                      {
-                        label: '2024年监管强度',
-                        data: [3.8, 4.5, 4.2, 4.0, 3.5, 3.8],
-                        backgroundColor: 'rgba(77, 157, 224, 0.2)',
-                        borderColor: 'rgba(77, 157, 224, 0.8)',
-                        pointBackgroundColor: 'rgba(77, 157, 224, 0.8)',
-                        borderWidth: 2
-                      },
-                      {
-                        label: '2025年监管强度预测',
-                        data: [4.2, 4.7, 3.8, 4.5, 4.0, 4.3],
-                        backgroundColor: 'rgba(40, 167, 69, 0.2)',
-                        borderColor: 'rgba(40, 167, 69, 0.8)',
-                        pointBackgroundColor: 'rgba(40, 167, 69, 0.8)',
-                        borderWidth: 2
-                      }
-                    ]
-                  },
-                  options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                      r: {
-                        min: 0,
-                        max: 5,
-                        ticks: {
-                          stepSize: 1
+          <div class="tab-navigation">
+            <div class="tab-link active" data-tab="regulatory-1">政策背景与监管导向</div>
+            <div class="tab-link" data-tab="regulatory-2">宏观经济与行业定位</div>
+          </div>
+          
+          <div class="tab-content active" id="regulatory-1">
+            <script>
+              document.addEventListener('DOMContentLoaded', function() {
+                if (document.getElementById('regulationTrendChart')) {
+                  const ctx = document.getElementById('regulationTrendChart').getContext('2d');
+                  
+                  new Chart(ctx, {
+                    type: 'radar',
+                    data: {
+                      labels: ['风险防控', '支持实体经济', '房地产金融稳定', '资本监管', '理财业务监管', '金融科技监管'],
+                      datasets: [
+                        {
+                          label: '2024年监管强度',
+                          data: [3.8, 4.5, 4.2, 4.0, 3.5, 3.8],
+                          backgroundColor: 'rgba(77, 157, 224, 0.2)',
+                          borderColor: 'rgba(77, 157, 224, 0.8)',
+                          pointBackgroundColor: 'rgba(77, 157, 224, 0.8)',
+                          borderWidth: 2
+                        },
+                        {
+                          label: '2025年监管强度预测',
+                          data: [4.2, 4.7, 3.8, 4.5, 4.0, 4.3],
+                          backgroundColor: 'rgba(40, 167, 69, 0.2)',
+                          borderColor: 'rgba(40, 167, 69, 0.8)',
+                          pointBackgroundColor: 'rgba(40, 167, 69, 0.8)',
+                          borderWidth: 2
                         }
-                      }
+                      ]
                     },
-                    plugins: {
-                      title: {
-                        display: true,
-                        text: '2024-2025年银行业监管重点预测',
-                        font: { size: 16 }
+                    options: {
+                      responsive: true,
+                      maintainAspectRatio: false,
+                      scales: {
+                        r: {
+                          min: 0,
+                          max: 5,
+                          ticks: {
+                            stepSize: 1
+                          }
+                        }
                       },
-                      tooltip: {
-                        callbacks: {
-                          label: function(context) {
-                            return `${context.dataset.label}: ${context.raw}/5`;
+                      plugins: {
+                        datalabels: {
+                          formatter: function(value) {
+                            return value.toFixed(1);
+                          },
+                          color: function(context) {
+                            return context.dataset.borderColor;
+                          },
+                          font: {
+                            weight: 'bold',
+                            size: 10
+                          }
+                        },
+                        title: {
+                          display: true,
+                          text: '2024-2025年银行业监管重点预测',
+                          font: { size: 16 }
+                        },
+                        tooltip: {
+                          callbacks: {
+                            label: function(context) {
+                              return `${context.dataset.label}: ${context.raw}/5`;
+                            }
                           }
                         }
                       }
                     }
-                  }
-                });
-              }
-            });
-          </script>
-          
-          <div class="chart-container">
-            <canvas id="regulationTrendChart"></canvas>
+                  });
+                }
+              });
+            </script>
+            
+            <div class="chart-container">
+              <canvas id="regulationTrendChart"></canvas>
+            </div>
+            
+            <div style="margin-top: 2rem;">
+              <p>2025年银行业监管重点将围绕以下几个方面展开：</p>
+              <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+                <li><span class="emphasis">风险防控持续强化</span>：进一步巩固金融安全底线，继续推进中小金融机构改革化险，指导地方政府运用专项债券等工具为地方法人银行补充资本，加快不良资产处置，防止区域性风险扩散。</li>
+                <li><span class="emphasis">深化金融供给侧改革</span>：推动银行业优化信贷结构，引导更多金融资源流向高质量发展的重点领域，如先进制造业、科技创新、绿色低碳、普惠金融等。</li>
+                <li><span class="emphasis">强化资本监管</span>：资本管理新规落地后，继续完善差异化资本监管制度，推动银行提高核心一级资本占比、优化风险加权资产配置。</li>
+                <li><span class="emphasis">完善金融风险处置框架</span>：存款保险制度改革、金融稳定保障基金运作以及风险处置协调机制进一步完善，建立市场化、法治化的风险处置机制。</li>
+                <li><span class="emphasis">房地产金融政策稳中有调</span>：继续支持刚性和改善性住房需求，优化存量房贷政策，促进房地产市场平稳健康发展，防范化解行业风险。</li>
+              </ol>
+              
+              <p>总体而言，2025年监管将在"防风险、强监管、促发展"的总基调下，更加注重精准施策和差异化监管，促进银行业在服务实体经济中实现高质量发展。</p>
+            </div>
           </div>
           
-          <div style="margin-top: 2rem;">
-            <p>2025年银行业监管重点将围绕以下几个方面展开：</p>
-            <ol style="margin: 1rem 0; padding-left: 1.5rem;">
-              <li><span class="emphasis">风险防控持续强化</span>：进一步巩固金融安全底线，继续推进中小金融机构改革化险，指导地方政府运用专项债券等工具为地方法人银行补充资本，加快不良资产处置，防止区域性风险扩散。</li>
-              <li><span class="emphasis">深化金融供给侧改革</span>：推动银行业优化信贷结构，引导更多金融资源流向高质量发展的重点领域，如先进制造业、科技创新、绿色低碳、普惠金融等。</li>
-              <li><span class="emphasis">强化资本监管</span>：资本管理新规落地后，继续完善差异化资本监管制度，推动银行提高核心一级资本占比、优化风险加权资产配置。</li>
-              <li><span class="emphasis">完善金融风险处置框架</span>：存款保险制度改革、金融稳定保障基金运作以及风险处置协调机制进一步完善，建立市场化、法治化的风险处置机制。</li>
-              <li><span class="emphasis">房地产金融政策稳中有调</span>：继续支持刚性和改善性住房需求，优化存量房贷政策，促进房地产市场平稳健康发展，防范化解行业风险。</li>
-            </ol>
+          <div class="tab-content" id="regulatory-2">
+            <h3 style="color: var(--primary-color); margin: 1rem 0 0.5rem;">宏观经济与行业定位</h3>
+            <p>2025年中国宏观经济预计将迎来温和复苏，GDP增速有望保持在5%左右的合理区间。这一宏观环境为银行业提供了相对稳定的外部条件，但结构性问题仍然存在。具体而言，经济复苏动能主要来自以下几个方面：</p>
             
-            <p>总体而言，2025年监管将在"防风险、强监管、促发展"的总基调下，更加注重精准施策和差异化监管，促进银行业在服务实体经济中实现高质量发展。</p>
+            <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius); margin: 1rem 0;">
+              <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">2025年经济驱动因素</h4>
+              <ul style="padding-left: 1.2rem;">
+                <li>制造业升级带动的投资增长，尤其是高端制造和战略性新兴产业</li>
+                <li>消费市场逐步恢复，居民消费意愿回升</li>
+                <li>数字经济、绿色低碳转型等新动能持续释放</li>
+                <li>区域协调发展战略深入推进，带动区域经济活力</li>
+                <li>重大基础设施项目持续发力，稳定投资增长</li>
+              </ul>
+            </div>
+            
+            <p>在这一大背景下，银行业的行业定位将更加明确：一是全面回归服务实体经济本源，为经济高质量发展提供金融支持；二是深化金融供给侧结构性改革，优化资源配置效率；三是平衡好发展与风险的关系，守住不发生系统性金融风险的底线。</p>
+            
+            <p>值得注意的是，2025年中国银行业将面临包括房地产市场调整、居民部门杠杆率高企、地方债务压力等挑战，这要求银行必须更加注重风险管控能力的提升。同时，银行业也将迎来重大发展机遇，包括数字化转型、绿色金融、养老金融等新兴领域的快速发展。</p>
+            
+            <div class="user-notes">
+              <h4>您的分析笔记</h4>
+              <textarea data-note-id="macro-analysis" placeholder="在此添加您对宏观经济与银行业定位的分析笔记..."></textarea>
+              <button class="save-notes" data-note-id="macro-analysis">保存笔记</button>
+            </div>
           </div>
         </div>
       </div>
@@ -364,6 +410,7 @@
               <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
                 <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">普惠金融</h4>
                 <p>普惠金融将继续深化发展，小微企业贷款增速保持在15%以上。银行将通过数字化手段降低获客和风控成本，提高普惠服务效率。供应链金融、小微融资担保等模式将广泛应用，普惠金融风险定价机制也将更加精准。农村普惠金融将借助数字乡村建设契机，实现服务触达更广泛的农村地区，助力乡村振兴战略实施。</p>
+              </div>
               <div style="background-color: var(--light-color); padding: 1rem; border-radius: var(--border-radius);">
                 <h4 style="color: var(--primary-color); margin-bottom: 0.5rem;">财富管理</h4>
                 <p>财富管理业务将成为银行非息收入增长的重要引擎，增速在20%左右。人口老龄化背景下，养老金融产品将快速发展，银行理财与公募基金、保险等产品联动更加紧密。高净值客户服务竞争加剧，家族信托、全球资产配置等高端服务将成为头部银行差异化竞争优势。数字化赋能将使财富管理服务下沉至大众客群，实现规模化增长。</p>

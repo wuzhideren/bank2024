@@ -7,7 +7,50 @@
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   <script src="js/main.js"></script>
+  <style>
+    /* 调整NIM页面格式，减少空白 */
+    .dashboard .card {
+      margin-bottom: 1rem;
+    }
+
+    .dashboard .chart-container {
+      margin-top: 0.75rem !important;
+      margin-bottom: 0.75rem !important;
+      height: 320px;
+    }
+
+    .dashboard .card-body {
+      padding: 0.75rem;
+    }
+
+    .dashboard .insight-card {
+      margin-bottom: 0.75rem;
+      padding: 0.5rem;
+    }
+
+    .dashboard p {
+      margin-bottom: 0.5rem;
+    }
+
+    .dashboard .metric-card {
+      padding: 0.75rem;
+    }
+
+    .dashboard .grid {
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .dashboard h3 {
+      margin-bottom: 0.5rem;
+    }
+
+    .dashboard ul, .dashboard ol {
+      margin: 0.5rem 0 !important;
+    }
+  </style>
 </head>
 <body>
   <header>
@@ -89,6 +132,124 @@
           <div class="chart-container">
             <canvas id="nimChart"></canvas>
           </div>
+          
+          <!-- 添加各类银行净息差变动趋势图表 -->
+          <div class="chart-container" style="margin-top: 0.75rem !important;">
+            <canvas id="bankNimTrendChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('bankNimTrendChart')) {
+                const ctx = document.getElementById('bankNimTrendChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [
+                      {
+                        label: '国有行',
+                        data: [1.90, 1.62, 1.44],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '股份行',
+                        data: [1.99, 1.76, 1.61],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '城商行',
+                        data: [1.67, 1.57, 1.38],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '农商行',
+                        data: [2.10, 1.90, 1.73],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value.toFixed(2) + '%';
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年各类银行净息差变动趋势',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y.toFixed(2) + '%';
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          usePointStyle: true,
+                          pointStyle: 'circle',
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        title: {
+                          display: true,
+                          text: '净息差 (%)'
+                        },
+                        suggestedMin: 1.3,
+                        suggestedMax: 2.2
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '报告期'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
         </div>
       </div>
 
@@ -140,6 +301,17 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value.toFixed(2) + '%';
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
                       title: {
                         display: true,
                         text: '2020-2024年贷款利率变化趋势',
@@ -241,15 +413,16 @@
             </tbody>
           </table>
           
-          <div style="margin-top: 2rem;">
-            <p>从上述数据可以清晰看出几个关键趋势：</p>
-            <ol style="margin: 1rem 0; padding-left: 1.5rem;">
-              <li>贷款利率下降速度远快于存款利率，导致息差持续收窄</li>
-              <li>个人住房贷款利率下降幅度最大（-2.25个百分点），反映房地产政策调整的影响</li>
-              <li>企业贷款利率累计下降1.33个百分点，显示实体经济融资成本大幅降低</li>
-              <li>存款付息率仅下降0.16个百分点，表明负债成本的高度刚性</li>
-              <li>净息差五年累计下降0.58个百分点，其中2023-2024年下降最为显著</li>
+          <div style="margin-top: 1.5rem; background-color: #f8f9fa; border-left: 4px solid #4d9de0; padding: 0.75rem !important; border-radius: 0.25rem;">
+            <p style="color: #2a5885; font-size: 1.1rem !important; margin-bottom: 0.5rem !important; font-weight: 600;">从上述数据可以清晰看出几个关键趋势：</p>
+            <ol style="margin: 0.5rem 0 !important; padding-left: 1.3rem !important;">
+              <li style="margin-bottom: 0.5rem !important;">贷款利率下降速度远快于存款利率，导致息差持续收窄</li>
+              <li style="margin-bottom: 0.5rem !important;">个人住房贷款利率下降幅度最大（-2.25个百分点），反映房地产政策调整的影响</li>
+              <li style="margin-bottom: 0.5rem !important;">企业贷款利率累计下降1.33个百分点，显示实体经济融资成本大幅降低</li>
+              <li style="margin-bottom: 0.5rem !important;">存款付息率仅下降0.16个百分点，表明负债成本的高度刚性</li>
+              <li style="margin-bottom: 0.5rem !important;">净息差五年累计下降0.58个百分点，其中2023-2024年下降最为显著</li>
             </ol>
+            <p style="margin-top: 0.5rem !important; border-top: 1px solid #e9ecef; padding-top: 0.5rem; font-weight: 500;">这一趋势表明银行业面临持续的息差压力，需要加快推进业务结构转型、增强非息收入来源，以应对传统存贷款业务利润空间的收窄。</p>
           </div>
         </div>
       </div>

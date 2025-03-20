@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   <script src="js/main.js"></script>
 </head>
 <body>
@@ -65,27 +66,170 @@
             </div>
             <div class="metric-card">
               <h3>贷款余额</h3>
-              <div class="value">225万亿</div>
+              <div class="value">218万亿</div>
               <div class="change increase">
                 <span>同比 +7.6%</span>
               </div>
             </div>
             <div class="metric-card">
               <h3>普惠小微贷款</h3>
-              <div class="value">32.6万亿</div>
+              <div class="value">32.9万亿</div>
               <div class="change increase">
                 <span>同比 +14.7%</span>
               </div>
             </div>
             <div class="metric-card">
-              <h3>绿色贷款</h3>
-              <div class="value">30.1万亿</div>
+              <h3>住户消费贷款</h3>
+              <div class="value">20.1万亿</div>
               <div class="change increase">
-                <span>同比 +36.5%</span>
+                <span>同比 +6.3%</span>
               </div>
             </div>
           </div>
 
+          <!-- 贷款规模增量占比图表 -->
+          <div class="chart-container">
+            <canvas id="loanIncrementChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('loanIncrementChart')) {
+                const ctx = document.getElementById('loanIncrementChart').getContext('2d');
+                
+                // 计算逐年增量数据
+                const data22 = [
+                  921810 - 817749, // 国有行 22年增量
+                  387279 - 363830, // 股份行 22年增量
+                  258292 - 231380, // 城商行 22年增量
+                  234433 - 211045  // 农商行 22年增量
+                ];
+                
+                const data23 = [
+                  1044773 - 921810, // 国有行 23年增量
+                  409535 - 387279, // 股份行 23年增量
+                  286198 - 258292, // 城商行 23年增量
+                  258032 - 234433  // 农商行 23年增量
+                ];
+                
+                const data24 = [
+                  1138790 - 1044773, // 国有行 24年增量
+                  426556 - 409535, // 股份行 24年增量
+                  309302 - 286198, // 城商行 24年增量
+                  277702 - 258032  // 农商行 24年增量
+                ];
+
+                // 计算各年度总增量
+                const total22 = data22.reduce((a, b) => a + b, 0);
+                const total23 = data23.reduce((a, b) => a + b, 0);
+                const total24 = data24.reduce((a, b) => a + b, 0);
+                
+                // 计算占比数据
+                const percent22 = data22.map(val => (val / total22 * 100).toFixed(1));
+                const percent23 = data23.map(val => (val / total23 * 100).toFixed(1));
+                const percent24 = data24.map(val => (val / total24 * 100).toFixed(1));
+                
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: ['2022年增量', '2023年增量', '2024年增量'],
+                    datasets: [
+                      {
+                        label: '国有行',
+                        data: [percent22[0], percent23[0], percent24[0]],
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                      },
+                      {
+                        label: '股份行',
+                        data: [percent22[1], percent23[1], percent24[1]],
+                        backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                      },
+                      {
+                        label: '城商行',
+                        data: [percent22[2], percent23[2], percent24[2]],
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                      },
+                      {
+                        label: '农商行',
+                        data: [percent22[3], percent23[3], percent24[3]],
+                        backgroundColor: 'rgba(153, 102, 255, 0.7)',
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        borderWidth: 1
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value + '%';
+                        },
+                        color: '#fff',
+                        font: {
+                          weight: 'bold',
+                          size: 12
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年各类银行贷款规模增量占比',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        callbacks: {
+                          label: function(context) {
+                            const label = context.dataset.label || '';
+                            const value = context.raw;
+                            return `${label}: ${value}%`;
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        stacked: true,
+                        beginAtZero: true,
+                        title: {
+                          display: true,
+                          text: '增量占比 (%)'
+                        },
+                        min: 0,
+                        max: 100
+                      },
+                      x: {
+                        stacked: true,
+                        title: {
+                          display: true,
+                          text: '年份'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+
+          <!-- 银行业资产规模与增速图表 -->
           <div class="chart-container">
             <canvas id="assetGrowthChart"></canvas>
           </div>
@@ -102,7 +246,7 @@
                     datasets: [
                       {
                         label: '银行业总资产(万亿元)',
-                        data: [290.0, 319.7, 344.8, 356.6, 385.5, 380.5],
+                        data: [239.5, 265.8, 288.6, 319.8, 354.8, 380.5],
                         borderColor: '#1e88e5',
                         backgroundColor: 'rgba(30, 136, 229, 0.1)',
                         borderWidth: 2,
@@ -115,7 +259,7 @@
                       },
                       {
                         label: '资产同比增速(%)',
-                        data: [8.1, 10.1, 8.6, 11.0, 7.2, 7.2],
+                        data: [9.1, 11.0, 8.6, 10.8, 11.0, 7.2],
                         borderColor: '#34c759',
                         borderWidth: 2,
                         tension: 0.3,
@@ -131,6 +275,21 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
+                      datalabels: {
+                        formatter: function(value, context) {
+                          if (context.datasetIndex === 0) {
+                            return value.toFixed(1);
+                          } else {
+                            return value.toFixed(1) + '%';
+                          }
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
                       title: {
                         display: true,
                         text: '2019-2024年银行业资产规模与增速变化',
@@ -191,6 +350,140 @@
           <h2>2.1 资产与信贷总量</h2>
         </div>
         <div class="card-body">
+          <!-- 添加新的贷款规模同比增速曲线图 -->
+          <div class="chart-container" style="height: 350px;">
+            <canvas id="loanGrowthChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('loanGrowthChart')) {
+                const ctx = document.getElementById('loanGrowthChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2022Q4', '2023Q4', '2024Q4'],
+                    datasets: [
+                      {
+                        label: '国有行',
+                        data: [
+                          ((921810 - 817749) / 817749 * 100).toFixed(1), // 2022年增速
+                          ((1044773 - 921810) / 921810 * 100).toFixed(1), // 2023年增速
+                          ((1138790 - 1044773) / 1044773 * 100).toFixed(1) // 2024年增速
+                        ],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '股份行',
+                        data: [
+                          ((387279 - 363830) / 363830 * 100).toFixed(1), // 2022年增速
+                          ((409535 - 387279) / 387279 * 100).toFixed(1), // 2023年增速
+                          ((426556 - 409535) / 409535 * 100).toFixed(1) // 2024年增速
+                        ],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '城商行',
+                        data: [
+                          ((258292 - 231380) / 231380 * 100).toFixed(1), // 2022年增速
+                          ((286198 - 258292) / 258292 * 100).toFixed(1), // 2023年增速
+                          ((309302 - 286198) / 286198 * 100).toFixed(1) // 2024年增速
+                        ],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '农商行',
+                        data: [
+                          ((234433 - 211045) / 211045 * 100).toFixed(1), // 2022年增速
+                          ((258032 - 234433) / 234433 * 100).toFixed(1), // 2023年增速
+                          ((277702 - 258032) / 258032 * 100).toFixed(1) // 2024年增速
+                        ],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value + '%';
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年各类银行贷款规模同比增速变化',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y + '%';
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          usePointStyle: true,
+                          pointStyle: 'circle',
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        title: {
+                          display: true,
+                          text: '同比增速 (%)'
+                        },
+                        suggestedMin: 0,
+                        suggestedMax: 15
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '报告期'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+
           <div class="tab-navigation">
             <div class="tab-link active" data-tab="scale-tab-1">总资产增速放缓</div>
             <div class="tab-link" data-tab="scale-tab-2">大型银行主导</div>
@@ -200,7 +493,7 @@
           <div class="tab-content active" id="scale-tab-1">
             <h3 class="tab-subtitle">2.1.1 总资产增速放缓（380.5万亿，+7.2%）</h3>
             <p>截至2023年末，中国商业银行资产总额约354.85万亿元，同比增长11.0%；2024年末我国银行业金融机构资产总额达380.5万亿元，同比增长7.2%（增速较上年明显放缓）。增速放缓背后有以下原因：一是监管部门推动金融"脱虚向实"，引导银行放缓表内外资产扩张速度；二是经济增速换挡使得优质信贷需求相对不足；三是银行主动调整经营策略，从"做大规模"转向"提质增效"。</p>
-            <p>从资产结构看，贷款占比进一步提升，表内资产质量向好。2024年末贷款余额突破225万亿元，较2023年末增加16.9万亿元，贷款占资产比重达59.1%，同比上升1.4个百分点。投资类资产规模相对稳定，主要配置于国债和地方政府债券等低风险资产。而同业资产和表外理财等规模继续受到控制，增速低于表内信贷，体现了监管"引导资金脱虚向实"的政策效果。</p>
+            <p>从资产结构看，贷款占比进一步提升，表内资产质量向好。2024年末贷款余额突破218万亿元，较2023年末增加15.4万亿元，贷款占资产比重达57.3%，同比上升0.2个百分点。投资类资产规模相对稳定，主要配置于国债和地方政府债券等低风险资产。而同业资产和表外理财等规模继续受到控制，增速低于表内信贷，体现了监管"引导资金脱虚向实"的政策效果。</p>
             
             <div class="user-notes">
               <h4>您的分析笔记</h4>
@@ -211,7 +504,7 @@
           
           <div class="tab-content" id="scale-tab-2">
             <h3 class="tab-subtitle">2.1.2 大型银行主导（占比42.8%）</h3>
-            <p>大型商业银行继续保持行业"压舱石"地位，2024年末资产规模达190.3万亿元，占全行业的42.8%，同比增长7.6%，略高于行业平均。大型银行对国家重点项目和战略领域的融资支持力度不断加大，对制造业中长期贷款和绿色金融领域的投入明显提升，展现出服务实体经济和落实国家战略的担当。</p>
+            <p>大型商业银行继续保持行业"压舱石"地位，2024年末资产规模达190.3万亿元，占全行业的50.0%，同比增长7.6%，略高于行业平均。大型银行对国家重点项目和战略领域的融资支持力度不断加大，对制造业中长期贷款和绿色金融领域的投入明显提升，展现出服务实体经济和落实国家战略的担当。</p>
             <p>从结构上看，大型银行在结构性存款搬家效应下，存款基础更加稳固，负债成本优势明显；资产端则得益于全国性网点布局和广泛的客户基础，贷款质量整体保持较好水平。在2024年的经济缓慢复苏过程中，国有大行发挥了稳定金融市场的重要作用，为中小微企业纾困、制造业升级、乡村振兴等领域提供了持续稳定的资金支持。</p>
             
             <div class="user-notes">
@@ -235,6 +528,231 @@
         </div>
       </div>
       
+      <!-- 新增贷款投向数据表 -->
+      <div class="card">
+        <div class="card-header">
+          <h2>贷款投向增速与增量数据</h2>
+        </div>
+        <div class="card-body">
+          <!-- 新增贷款投向增速图表 -->
+          <div class="chart-container" style="height: 350px;">
+            <canvas id="loanDirectionGrowthChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('loanDirectionGrowthChart')) {
+                const ctx = document.getElementById('loanDirectionGrowthChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'line',
+                  data: {
+                    labels: ['2022年', '2023年', '2024年'],
+                    datasets: [
+                      {
+                        label: '企事业单位贷款',
+                        data: [14, 13, 9],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '企事业单位经营性贷款',
+                        data: [13, 15, 8],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '住户消费性贷款',
+                        data: [4, 15, 6],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '住户经营性贷款',
+                        data: [17, 17, 9],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value + '%';
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年贷款投向同比增速变化趋势',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            return context.dataset.label + ': ' + context.parsed.y + '%';
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top'
+                      }
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: false,
+                        title: {
+                          display: true,
+                          text: '同比增速 (%)'
+                        },
+                        min: 0,
+                        max: 20
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '年份'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+          
+          <!-- 新增贷款投向增量图表 -->
+          <div class="chart-container" style="height: 350px; margin-top: 2rem;">
+            <canvas id="loanDirectionIncrementChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('loanDirectionIncrementChart')) {
+                const ctx = document.getElementById('loanDirectionIncrementChart').getContext('2d');
+                
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: ['企事业单位贷款', '企事业单位经营性贷款', '住户消费性贷款', '住户经营性贷款'],
+                    datasets: [
+                      {
+                        label: '2022年增量',
+                        data: [166800, 63300, 6800, 26800],
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                      },
+                      {
+                        label: '2023年增量',
+                        data: [177100, 82700, 25200, 32500],
+                        backgroundColor: 'rgba(255, 159, 64, 0.7)',
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        borderWidth: 1
+                      },
+                      {
+                        label: '2024年增量',
+                        data: [139400, 49500, 12400, 19900],
+                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return (value/1000).toFixed(0) + '亿';
+                        },
+                        color: '#fff',
+                        font: {
+                          weight: 'bold',
+                          size: 12
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年贷款投向增量对比',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        callbacks: {
+                          label: function(context) {
+                            return context.dataset.label + ': ' + (context.parsed.y/1000).toFixed(0) + '亿元';
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top'
+                      }
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        title: {
+                          display: true,
+                          text: '增量 (亿元)'
+                        }
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '贷款类型'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
+          
+          <!-- 新增贷款投向分析洞见 -->
+          <div class="insight-card" style="margin-top: 2rem;">
+            <h3>贷款投向增速与结构变化洞察</h3>
+            <p>2022-2024年贷款投向数据呈现以下几个明显趋势：</p>
+            <ol style="margin: 1rem 0; padding-left: 1.5rem;">
+              <li><span class="emphasis">整体增速持续放缓</span>：从图表可以明显看出，各类贷款投向增速总体呈现下行趋势，企事业单位贷款增速从2022年的14%下降至2024年的9%，反映了宏观经济下行压力下融资需求的相对减弱。</li>
+              <li><span class="emphasis">住户消费性贷款波动明显</span>：2022年仅增长4%，2023年大幅回升至15%，2024年又回落至6%，表明居民消费恢复不稳定，受疫情后效应和消费信心影响较大。</li>
+              <li><span class="emphasis">住户经营性贷款降幅最大</span>：从连续两年17%的高增速大幅降至9%，显示小微企业主经营意愿和能力受到严峻挑战。</li>
+              <li><span class="emphasis">企业贷款结构优化</span>：从增量数据看，企事业单位贷款仍是信贷投放主力，2023年增量达到1.77万亿元，2024年虽有所回落但仍高达1.39万亿元，反映银行持续强化对实体经济的支持。</li>
+            </ol>
+            <p>整体来看，贷款投向变化反映了"稳企业、保就业"的政策导向，但消费和小微经营领域的波动也说明经济复苏仍面临压力，金融支持实体经济的政策可能需要在2025年继续加强。</p>
+          </div>
+        </div>
+      </div>
+      
       <div class="card">
         <div class="card-header">
           <h2>2.2 信贷结构优化</h2>
@@ -248,7 +766,7 @@
           
           <div class="tab-content active" id="credit-tab-1">
             <h3 class="tab-subtitle">2.2.1 普惠小微贷款（32.6万亿，+14.7%）</h3>
-            <p>2024年普惠小微贷款保持高速增长，余额达32.6万亿元，同比增长14.7%，增速为各项贷款平均水平的近2倍。这一成绩得益于监管政策引导和银行战略调整的共同作用：一方面，央行实施普惠小微贷款支持工具，对符合条件的银行提供低成本资金支持；另一方面，银行加强普惠金融专营机制建设，运用大数据、云计算等科技手段提升小微企业融资便利性和可得性。</p>
+            <p>2024年普惠小微贷款保持高速增长，余额达32.9万亿元，同比增长14.7%，增速为各项贷款平均水平的近2倍。这一成绩得益于监管政策引导和银行战略调整的共同作用：一方面，央行实施普惠小微贷款支持工具，对符合条件的银行提供低成本资金支持；另一方面，银行加强普惠金融专营机制建设，运用大数据、云计算等科技手段提升小微企业融资便利性和可得性。</p>
             <p>随着普惠小微贷款规模持续扩大，全国小微企业贷款覆盖面不断扩大，小微企业贷款综合融资成本持续下降，2024年较2017年末累计下降约3.8个百分点。从银行类型看，大型银行和城商行是普惠小微金融发展的主力军，分别依托科技赋能和本地化服务优势，在小微金融领域形成差异化竞争格局。</p>
             
             <div class="user-notes">
@@ -259,8 +777,8 @@
           </div>
           
           <div class="tab-content" id="credit-tab-2">
-            <h3 class="tab-subtitle">2.2.2 绿色贷款高速增长（30.1万亿，+36.5%）</h3>
-            <p>绿色金融成为2024年银行信贷结构调整的最大亮点。年末绿色贷款余额达30.1万亿元，同比增长36.5%，远高于各项贷款平均增速，占各项贷款比重提升至13.4%。绿色贷款主要投向清洁能源、节能环保、绿色交通等领域，对推动经济绿色低碳转型发挥了积极作用。"双碳"目标下，银行业积极探索绿色金融产品和服务创新，如绿色债券、碳金融、ESG投融资等，形成了多层次、多样化的绿色金融体系。</p>
+            <h3 class="tab-subtitle">2.2.2 绿色贷款高速增长（36.6万亿，+21.7%）</h3>
+            <p>绿色金融成为2024年银行信贷结构调整的最大亮点。年末绿色贷款余额达36.6万亿元，同比增长21.7%，远高于各项贷款平均增速，占各项贷款比重提升至13.4%。绿色贷款主要投向清洁能源、节能环保、绿色交通等领域，对推动经济绿色低碳转型发挥了积极作用。"双碳"目标下，银行业积极探索绿色金融产品和服务创新，如绿色债券、碳金融、ESG投融资等，形成了多层次、多样化的绿色金融体系。</p>
             <p>政策支持是绿色贷款高速增长的重要推动力。央行设立碳减排支持工具，对金融机构向碳减排重点领域提供的符合条件的贷款给予一定比例资金支持，提高了银行开展绿色信贷业务的积极性。监管部门也通过完善绿色信贷统计制度、加强绿色银行评价、开展气候风险压力测试等方式，引导银行加大绿色投融资力度，预计未来绿色贷款占比将进一步提高。</p>
             
             <script>
@@ -275,7 +793,7 @@
                       datasets: [
                         {
                           label: '绿色贷款余额(万亿元)',
-                          data: [10.6, 12.0, 15.9, 22.1, 30.1, 41.0],
+                          data: [10.2, 12.0, 15.9, 22.0, 30.1, 36.6],
                           borderColor: '#34c759',
                           backgroundColor: 'rgba(52, 199, 89, 0.1)',
                           borderWidth: 2,
@@ -288,7 +806,7 @@
                         },
                         {
                           label: '同比增速(%)',
-                          data: [26.5, 13.2, 32.5, 39.0, 36.5, 36.0],
+                          data: [24.2, 16.9, 33.1, 38.6, 36.5, 36.0],
                           borderColor: '#1e88e5',
                           borderWidth: 2,
                           tension: 0.3,
@@ -304,6 +822,21 @@
                       responsive: true,
                       maintainAspectRatio: false,
                       plugins: {
+                        datalabels: {
+                          formatter: function(value, context) {
+                            if (context.datasetIndex === 0) {
+                              return value.toFixed(1);
+                            } else {
+                              return value.toFixed(1) + '%';
+                            }
+                          },
+                          color: function(context) {
+                            return context.dataset.borderColor;
+                          },
+                          font: {
+                            weight: 'bold'
+                          }
+                        },
                         title: {
                           display: true,
                           text: '2019-2024年绿色贷款余额及增速',
@@ -354,8 +887,8 @@
           </div>
           
           <div class="tab-content" id="credit-tab-3">
-            <h3 class="tab-subtitle">2.2.3 房地产贷款首次收缩（-1.0%）</h3>
-            <p>2023年末人民币房地产贷款余额52.6万亿元，同比下降1.0%，其中个人住房贷款38.2万亿元，同比下降1.6%。这是有记录以来房地产贷款余额首次年度负增长，反映了房地产市场调整和银行信贷策略转变的双重影响。房地产贷款占各项贷款比重降至23.4%，较高峰时期下降近6个百分点。</p>
+            <h3 class="tab-subtitle">2.2.3 房地产贷款收缩（-0.2%）</h3>
+            <p>2024年末人民币房地产贷款余额52.8万亿元，同比下降0.2%，其中个人住房贷款37.7万亿元，同比下降1.3%。这是有记录以来房地产贷款余额连续两年年度负增长，反映了房地产市场调整和银行信贷策略转变的双重影响。房地产贷款占各项贷款比重降至23.4%，较高峰时期下降近6个百分点。</p>
             <p>房地产贷款减少主要受三方面因素影响：一是居民提前还贷现象增多，约有2万亿元的提前还款导致个人按揭余额下降；二是银行主动调整房地产信贷策略，压降开发贷款尤其是风险较高的项目；三是房地产市场需求下降，新发放住房贷款规模缩减。尽管如此，银行仍积极配合"保交楼"等政策，对优质房企和保障性住房项目保持适度信贷支持，推动房地产市场平稳健康发展。随着存量房贷利率调整政策落地和二套房首付比例下调，预计2025年房地产贷款降幅将有所收窄，但房贷占比持续下降的趋势不会改变。</p>
             
             <div class="user-notes">
@@ -374,5 +907,17 @@
       <p>© 2024 中国银行业绩分析报告 | 数据来源：金融监管总局、中国人民银行</p>
     </div>
   </footer>
+
+  <script>
+    // 确保信贷结构优化默认展开所有标签
+    document.addEventListener('DOMContentLoaded', function() {
+      // 获取所有信贷结构优化的标签内容
+      const creditTabContents = document.querySelectorAll('[id^="credit-tab-"]');
+      // 显示所有标签内容
+      creditTabContents.forEach(content => {
+        content.classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html> 

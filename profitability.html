@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="css/styles.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
   <script src="js/main.js"></script>
 </head>
 <body>
@@ -89,6 +90,158 @@
           <div class="chart-container">
             <canvas id="profitabilityChart"></canvas>
           </div>
+          
+          <!-- 添加商业银行净利润同比增量图表 -->
+          <div class="chart-container" style="margin-top: 1.5rem;">
+            <canvas id="profitIncrementYearChart"></canvas>
+          </div>
+          
+          <script>
+            document.addEventListener('DOMContentLoaded', function() {
+              if (document.getElementById('profitIncrementYearChart')) {
+                const ctx = document.getElementById('profitIncrementYearChart').getContext('2d');
+                
+                // 三年商业银行净利润数据(亿元)
+                const netProfitData = [23030, 23775, 23235];
+                
+                // 计算同比增量
+                const yearlyIncrements = [
+                  0, // 22年同比增量(不比较21年)
+                  netProfitData[1] - netProfitData[0], // 23年同比增量
+                  netProfitData[2] - netProfitData[1]  // 24年同比增量
+                ];
+                
+                // 计算同比增长率
+                const growthRates = [
+                  0, // 22年增长率(不比较21年)
+                  ((netProfitData[1] - netProfitData[0]) / netProfitData[0] * 100).toFixed(1), // 23年增长率
+                  ((netProfitData[2] - netProfitData[1]) / netProfitData[1] * 100).toFixed(1)  // 24年增长率
+                ];
+                
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: ['2022年', '2023年', '2024年'],
+                    datasets: [
+                      {
+                        label: '净利润(亿元)',
+                        type: 'bar',
+                        data: netProfitData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                        yAxisID: 'y'
+                      },
+                      {
+                        label: '同比增长率(%)',
+                        type: 'line',
+                        data: [5.4, 3.2, -2.0], // 预设的增长率
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                        pointBackgroundColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4,
+                        yAxisID: 'y1'
+                      }
+                    ]
+                  },
+                  options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      datalabels: {
+                        formatter: function(value, context) {
+                          if (context.datasetIndex === 0) {
+                            return value;
+                          } else if (context.datasetIndex === 1 && context.dataIndex > 0) {
+                            return value + '%';
+                          }
+                          return null; // 2022年不显示增长率
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold',
+                          size: 12
+                        },
+                        // 只在部分数据点显示
+                        display: function(context) {
+                          return !(context.datasetIndex === 1 && context.dataIndex === 0);
+                        }
+                      },
+                      title: {
+                        display: true,
+                        text: '2022-2024年商业银行净利润及增长率',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
+                      },
+                      tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        callbacks: {
+                          label: function(context) {
+                            const label = context.dataset.label || '';
+                            if (context.datasetIndex === 0) {
+                              return `${label}: ${context.parsed.y}亿元`;
+                            } else if (context.datasetIndex === 1) {
+                              if (context.dataIndex === 0) return `${label}: 估算 +3.5%`;
+                              return `${label}: ${context.parsed.y}%`;
+                            }
+                          }
+                        }
+                      },
+                      legend: {
+                        position: 'top',
+                        labels: {
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
+                      }
+                    },
+                    scales: {
+                      y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                          display: true,
+                          text: '净利润(亿元)'
+                        },
+                        min: 22000,
+                        suggestedMax: 25000
+                      },
+                      y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: {
+                          display: true,
+                          text: '增长率(%)'
+                        },
+                        min: -3,
+                        max: 4,
+                        grid: {
+                          drawOnChartArea: false
+                        }
+                      },
+                      x: {
+                        title: {
+                          display: true,
+                          text: '年份'
+                        }
+                      }
+                    }
+                  }
+                });
+              }
+            });
+          </script>
         </div>
       </div>
 
@@ -130,6 +283,15 @@
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value.toFixed(1) + '%';
+                        },
+                        color: '#fff',
+                        font: {
+                          weight: 'bold'
+                        }
+                      },
                       title: {
                         display: true,
                         text: '2024年各类银行净利润同比增长率对比 (%)',
@@ -214,130 +376,151 @@
               </tr>
             </tbody>
           </table>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="card-header">
-          <h2>银行业收入结构分析</h2>
-        </div>
-        <div class="card-body">
-          <div class="grid">
-            <div class="chart-container" style="height: 300px;">
-              <canvas id="incomeStructureChart"></canvas>
-            </div>
-            <div>
-              <p>2023-2024年商业银行收入结构分析：</p>
-              <ul style="margin: 1rem 0; padding-left: 1.5rem;">
-                <li><span class="emphasis">利息净收入</span>：仍是主要来源，但占比有所下降。2023年上市银行利息净收入约4.4万亿元，占营业收入的75.5%，同比减少3.0%。</li>
-                <li><span class="emphasis">手续费及佣金净收入</span>：约7734亿元，占比13.2%，同比下降7.7%，主要受资本市场低迷和减费让利政策影响。</li>
-                <li><span class="emphasis">其他非息收入</span>：约6648亿元，占比11.3%，同比下降2.8%。</li>
-                <li><span class="emphasis">非息收入占比</span>：根据金监总局数据，2023年银行业非息收入占比从一季度22%逐季降至四季度的19.93%，至2024年末为22.42%，仍显著低于欧美银行(~33%)。</li>
-              </ul>
-              <p>收入结构变化反映了银行在利率下行环境中加强中间业务发展的努力，但非息收入增长仍未能有效对冲息差收窄的影响。银行需要加快推进财富管理、养老金融等新兴业务，培育新的收入增长点。</p>
-            </div>
+          <!-- 新增净利润增量占比图表 -->
+          <div class="chart-container" style="margin-top: 2rem;">
+            <canvas id="profitIncrementChart"></canvas>
           </div>
           
           <script>
             document.addEventListener('DOMContentLoaded', function() {
-              if (document.getElementById('incomeStructureChart')) {
-                const ctx = document.getElementById('incomeStructureChart').getContext('2d');
+              if (document.getElementById('profitIncrementChart')) {
+                const ctx = document.getElementById('profitIncrementChart').getContext('2d');
+                
+                // 定义各类银行22-24年净利润数据（根据实际数据设置）
+                // 注意：下面的数据是估算值，请根据实际情况调整
+                const profitData = {
+                  '国有行': [12932, 13161, 13099], // 22年, 23年, 24年
+                  '股份行': [5064, 4878, 4993],
+                  '城商行': [2553, 2931, 2546],
+                  '农商行': [2081, 2288, 2155]  // 估算值
+                };
+                
+                // 计算各银行类型的年度增长率
+                // 21年数据按照22年数据反推估算
+                const growthRate = {
+                  '国有行': [
+                    5.0, // 22年增长率估算
+                    ((profitData['国有行'][1] - profitData['国有行'][0]) / profitData['国有行'][0] * 100).toFixed(1), // 23年增长率
+                    ((profitData['国有行'][2] - profitData['国有行'][1]) / profitData['国有行'][1] * 100).toFixed(1)  // 24年增长率
+                  ],
+                  '股份行': [
+                    8.8, // 22年增长率估算
+                    ((profitData['股份行'][1] - profitData['股份行'][0]) / profitData['股份行'][0] * 100).toFixed(1),
+                    ((profitData['股份行'][2] - profitData['股份行'][1]) / profitData['股份行'][1] * 100).toFixed(1)
+                  ],
+                  '城商行': [
+                    6.6, // 22年增长率估算
+                    ((profitData['城商行'][1] - profitData['城商行'][0]) / profitData['城商行'][0] * 100).toFixed(1),
+                    ((profitData['城商行'][2] - profitData['城商行'][1]) / profitData['城商行'][1] * 100).toFixed(1)
+                  ],
+                  '农商行': [
+                    -2.3, // 22年增长率估算
+                    ((profitData['农商行'][1] - profitData['农商行'][0]) / profitData['农商行'][0] * 100).toFixed(1),
+                    ((profitData['农商行'][2] - profitData['农商行'][1]) / profitData['农商行'][1] * 100).toFixed(1)
+                  ]
+                };
                 
                 new Chart(ctx, {
-                  type: 'doughnut',
+                  type: 'line',
                   data: {
-                    labels: ['利息净收入', '手续费及佣金净收入', '其他非息收入'],
-                    datasets: [{
-                      data: [75.5, 13.2, 11.3],
-                      backgroundColor: [
-                        '#4d9de0',
-                        '#28a745',
-                        '#ffc107'
-                      ],
-                      borderColor: [
-                        '#366994',
-                        '#1e7e34',
-                        '#d39e00'
-                      ],
-                      borderWidth: 1
-                    }]
+                    labels: ['2022年', '2023年', '2024年'],
+                    datasets: [
+                      {
+                        label: '国有行',
+                        data: growthRate['国有行'],
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '股份行',
+                        data: growthRate['股份行'],
+                        borderColor: 'rgba(255, 159, 64, 1)',
+                        backgroundColor: 'rgba(255, 159, 64, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '城商行',
+                        data: growthRate['城商行'],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      },
+                      {
+                        label: '农商行',
+                        data: growthRate['农商行'],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.1)',
+                        tension: 0.3,
+                        fill: false,
+                        pointRadius: 4
+                      }
+                    ]
                   },
                   options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     plugins: {
+                      datalabels: {
+                        formatter: function(value) {
+                          return value + '%';
+                        },
+                        color: function(context) {
+                          return context.dataset.borderColor;
+                        },
+                        font: {
+                          weight: 'bold',
+                          size: 12
+                        }
+                      },
                       title: {
                         display: true,
-                        text: '2023年上市银行收入结构占比 (%)',
-                        font: { size: 14 }
+                        text: '2022-2024年各类银行净利润增长率变化趋势',
+                        font: { 
+                          size: 16,
+                          family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                        }
                       },
                       tooltip: {
+                        mode: 'index',
+                        intersect: false,
                         callbacks: {
                           label: function(context) {
-                            const label = context.label || '';
+                            const label = context.dataset.label || '';
                             const value = context.raw;
                             return `${label}: ${value}%`;
                           }
                         }
                       },
                       legend: {
-                        position: 'right'
-                      }
-                    }
-                  }
-                });
-              }
-            });
-          </script>
-          
-          <!-- 非息收入趋势图 -->
-          <div class="chart-container" style="margin-top: 2rem;">
-            <canvas id="nonInterestIncomeChart"></canvas>
-          </div>
-          
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-              if (document.getElementById('nonInterestIncomeChart')) {
-                const ctx = document.getElementById('nonInterestIncomeChart').getContext('2d');
-                
-                new Chart(ctx, {
-                  type: 'line',
-                  data: {
-                    labels: ['2020Q4', '2021Q4', '2022Q4', '2023Q4', '2024Q4'],
-                    datasets: [{
-                      label: '非息收入占比 (%)',
-                      data: [21.04, 19.81, 18.80, 19.93, 22.42],
-                      borderColor: '#28a745',
-                      backgroundColor: 'rgba(40, 167, 69, 0.1)',
-                      borderWidth: 2,
-                      tension: 0.2,
-                      fill: true
-                    }]
-                  },
-                  options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                      title: {
-                        display: true,
-                        text: '2020-2024年商业银行非息收入占比变化趋势',
-                        font: { size: 14 }
+                        position: 'top',
+                        labels: {
+                          font: {
+                            family: '-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif'
+                          }
+                        }
                       }
                     },
                     scales: {
                       y: {
-                        beginAtZero: false,
                         title: {
                           display: true,
-                          text: '占比 (%)'
+                          text: '净利润增长率(%)'
                         },
-                        min: 18,
-                        max: 24
+                        min: -15,
+                        max: 10
                       },
                       x: {
                         title: {
                           display: true,
-                          text: '报告期'
+                          text: '年份'
                         }
                       }
                     }
@@ -364,8 +547,8 @@
             <p>2024年银行业净息差收窄是影响利润的最主要因素：</p>
             <ul style="margin: 1rem 0; padding-left: 1.5rem;">
               <li><span class="emphasis">息差大幅下滑</span>：行业净息差由2023年的1.69%降至1.52%，降幅0.17个百分点，创有统计以来最低水平。</li>
-              <li><span class="emphasis">贷款利率下行</span>：在多轮LPR调降和存量房贷利率下调影响下，生息资产收益率显著下降。2024年8月末企业贷款加权平均利率约3.87%，个人住房贷款平均利率也降至4.11%左右，均为有统计以来最低水平。</li>
-              <li><span class="emphasis">负债成本刚性</span>：尽管央行两度引导存款利率下调，但存款结构持续向定期、靠档计息产品倾斜，2024年银行存款平均付息率约为1.74%，相比年初仅小幅下降（2023年约1.8%）。</li>
+              <li><span class="emphasis">贷款利率下行</span>：在多轮LPR调降和存量房贷利率下调影响下，生息资产收益率显著下降。2024年12月发放的企业贷款加权平均利率约3.43%，同比下降36bp，个人住房贷款平均利率也降至3.11%左右，同比下降88bp,均为有统计以来最低水平。</li>
+              <li><span class="emphasis">负债成本刚性</span>：尽管央行两度引导存款利率下调，但存款结构持续向定期、靠档计息产品倾斜，2024年银行存款平均付息率约为1.74%左右，相比年初仅小幅下降（2023年约1.8%）。</li>
               <li><span class="emphasis">息差收窄贡献</span>：以五大行为例，2024年前三季度其生息资产收益率同比下降约40bps，而计息负债成本下降不到15bps，利差缩窄约25bps基本由资产端驱动。</li>
             </ul>
             <p>净息差收窄直接导致银行利息净收入大幅减少，是利润下滑的主要原因。这一趋势在2024年下半年有所缓解，但全年依然对银行盈利形成较大压力。</p>
